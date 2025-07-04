@@ -2,7 +2,8 @@ import {Component, OnInit, ViewChild} from '@angular/core';
 import {Marca} from '../../modelo/Marca';
 import {
   MatTableDataSource
-} from '@angular/material/table';
+}
+from '@angular/material/table';
 import {MarcaService} from '../../servicio/marca.service';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {MatPaginator} from '@angular/material/paginator';

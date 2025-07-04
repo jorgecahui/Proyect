@@ -1,114 +1,42 @@
-
-body {
-  margin: 0;
-  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-  font-family: 'Roboto', sans-serif;
-}
-
-
 .example-container {
-  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
 }
-
-
-.example-toolbar {
-  background: linear-gradient(to right, #3f51b5, #5c6bc0);
-  color: white;
-  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
-  padding: 0 1rem;
+.example-sidenav-container {
+  flex: 1;
 }
-
-
 .example-spacer {
   flex: 1 1 auto;
 }
-
-
-.no-border {
-  border: none;
-  outline: none;
-}
-
-
-mat-sidenav {
-  background: rgba(255, 255, 255, 0.85);
-  backdrop-filter: blur(10px);
-  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.15);
-  transition: all 0.3s ease;
-}
-
-
-mat-sidenav img {
-  display: block;
-  margin: 1rem auto;
-  border-radius: 50%;
-  box-shadow: 0 0 10px rgba(0,0,0,0.2);
-}
-
-
-.myButton {
-  color: #333;
-  border-radius: 8px;
-  margin: 0.2rem 0.5rem;
-  transition: all 0.3s ease;
-}
-
-.myButton:hover {
-  background: linear-gradient(to right, #3f51b5, #5c6bc0);
-  color: #fff;
-  transform: translateX(5px);
-}
-
-
-.myButton mat-icon {
-  margin-right: 0.5rem;
-}
-
-
 .active {
-  background: #3f51b5;
-  color: white !important;
-  box-shadow: inset 5px 0 0 #ffc107;
+  background-color: #dcdcdcc1;
+}
+.myButton:focus{
+  box-shadow: 0 0 rgba(255, 255, 255, 1) !important;
+  transition:none !important;
+  background-color: rgba(255, 255, 255, 1) !important;
+  -webkit-tap-highlight-color:rgba(255, 255, 255, 1) !important;
+}
+.no-border {
+  border: none; /* Elimina cualquier borde */
+  box-shadow: none; /* Si tiene sombra, también la eliminamos */
+  outline: none; /* Quita el borde al hacer focus */
 }
 
 
-mat-sidenav-content {
-  padding: 2rem;
-  transition: all 0.3s ease;
-  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-}
-
-
-.theme-menu-item {
+.theme-menu-item{
   display: flex;
   align-items: center;
+  gap: 12px;
 }
 
-.color-preview {
-  width: 20px;
-  height: 20px;
-  border-radius: 4px;
-  margin-right: 10px;
-  border: 1px solid #ccc;
-}
-
-
-mat-menu button[mat-menu-item]:hover {
-  background-color: rgba(63, 81, 181, 0.1);
-}
-
-
-mat-sidenav.opened {
-  animation: fadeInLeft 0.3s ease;
-}
-
-@keyframes fadeInLeft {
-  0% {
-    transform: translateX(-100%);
-    opacity: 0;
-  }
-  100% {
-    transform: translateX(0);
-    opacity: 1;
-  }
+.color-preview{
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
 }

@@ -1,13 +1,14 @@
 package pe.edu.upeu.sysalmacen.dtos;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
 public class RepuestoDTO {
-    private Long id;
+    private Long idRepuesto;
     private String nombre;
+    private String stockActual;
+    private String codigo;
+    private String ubicacion;
+    private String estado;
+    private String stockMinimo;
 }

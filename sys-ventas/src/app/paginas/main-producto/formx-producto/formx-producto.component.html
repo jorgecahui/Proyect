@@ -55,6 +55,7 @@
           <mat-hint align="start" *ngIf="productForm.controls['categoria'].invalid && productForm.controls['categoria'].touched" >Este campo es requerido</mat-hint>
         </mat-form-field>
         <mat-form-field>
+
           <mat-label>Marca</mat-label>
           <mat-select formControlName="marca">
             <mat-option *ngFor="let marca of marcas" [value]="marca.idMarca" >{{ marca.nombre }}</mat-option>

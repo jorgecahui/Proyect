@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MatChipsModule } from '@angular/material/chips';
 import {MatTableModule} from "@angular/material/table";
 import {MatInputModule} from "@angular/material/input";
 import {MatPaginatorModule} from "@angular/material/paginator";
@@ -17,16 +16,11 @@ import {MatSnackBarModule} from "@angular/material/snack-bar";
 import {MatDialogModule} from "@angular/material/dialog";
 import {MatSelectModule} from "@angular/material/select";
 import {MatAutocompleteModule} from "@angular/material/autocomplete";
-import {MatDatepickerModule} from '@angular/material/datepicker';
-import {MatNativeDateModule} from '@angular/material/core';
 
 @NgModule({
   declarations: [],
   imports: [
-    CommonModule,
-    MatChipsModule,
-    MatDatepickerModule,
-    MatNativeDateModule
+    CommonModule
   ],
   exports: [
     MatTableModule, MatInputModule, MatPaginatorModule, MatIconModule,
@@ -35,11 +29,8 @@ import {MatNativeDateModule} from '@angular/material/core';
     MatFormFieldModule,
     MatSnackBarModule,
     MatDialogModule,
-    MatChipsModule,
     MatSelectModule,
-    MatAutocompleteModule,
-    MatDatepickerModule,
-    MatNativeDateModule
+    MatAutocompleteModule
   ]
 })
 export class MaterialModule { }

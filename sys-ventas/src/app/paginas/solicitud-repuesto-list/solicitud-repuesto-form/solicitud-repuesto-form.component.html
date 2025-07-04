@@ -1,0 +1,99 @@
+<h2 mat-dialog-title>{{ isEditMode ? 'Editar' : 'Nueva' }} Solicitud de Repuesto</h2>
+
+<form [formGroup]="solicitudForm" (ngSubmit)="onSubmit()" class="form-container">
+  <!-- Fecha -->
+  <mat-form-field appearance="outline" class="full-width">
+    <mat-label>Fecha</mat-label>
+    <input matInput formControlName="fecha" type="date">
+    <mat-error *ngIf="solicitudForm.get('fecha')?.hasError('required')">
+      Fecha es requerida
+    </mat-error>
+  </mat-form-field>
+
+  <!-- Cantidad -->
+  <mat-form-field appearance="outline" class="full-width">
+    <mat-label>Cantidad</mat-label>
+    <input matInput formControlName="cantidad" type="number" min="1">
+    <mat-error *ngIf="solicitudForm.get('cantidad')?.hasError('required')">
+      Cantidad es requerida
+    </mat-error>
+    <mat-error *ngIf="solicitudForm.get('cantidad')?.hasError('min')">
+      Mínimo 1
+    </mat-error>
+  </mat-form-field>
+
+  <!-- Motivo -->
+  <mat-form-field appearance="outline" class="full-width">
+    <mat-label>Motivo</mat-label>
+    <textarea matInput formControlName="motivo" rows="3"></textarea>
+    <mat-error *ngIf="solicitudForm.get('motivo')?.hasError('required')">
+      Motivo es requerido
+    </mat-error>
+    <mat-error *ngIf="solicitudForm.get('motivo')?.hasError('maxlength')">
+      Máximo 200 caracteres
+    </mat-error>
+  </mat-form-field>
+
+  <!-- Estado (solo en modo edición) -->
+  <div *ngIf="isEditMode">
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Estado</mat-label>
+      <mat-select formControlName="estado">
+        <mat-option *ngFor="let estado of estados" [value]="estado">
+          {{ estado }}
+        </mat-option>
+      </mat-select>
+      <mat-error *ngIf="solicitudForm.get('estado')?.hasError('required')">
+        Estado es requerido
+      </mat-error>
+    </mat-form-field>
+  </div>
+
+  <!-- Usuario -->
+  <mat-form-field appearance="outline" class="full-width">
+    <mat-label>Usuario</mat-label>
+    <mat-select formControlName="usuarioId">
+      <mat-option *ngFor="let usuario of usuarios" [value]="usuario.idUsuario">
+        {{ usuario.nombre }} {{ usuario.apellido }}
+      </mat-option>
+    </mat-select>
+    <mat-error *ngIf="solicitudForm.get('usuarioId')?.hasError('required')">
+      Usuario es requerido
+    </mat-error>
+  </mat-form-field>
+
+  <!-- Repuesto -->
+  <mat-form-field appearance="outline" class="full-width">
+    <mat-label>Repuesto</mat-label>
+    <mat-select formControlName="repuestoId">
+      <mat-option *ngFor="let repuesto of repuestos" [value]="repuesto.idRepuesto">
+        {{ repuesto.nombre }}
+      </mat-option>
+    </mat-select>
+    <mat-error *ngIf="solicitudForm.get('repuestoId')?.hasError('required')">
+      Repuesto es requerido
+    </mat-error>
+  </mat-form-field>
+
+  <!-- Bus -->
+  <mat-form-field appearance="outline" class="full-width">
+    <mat-label>Bus</mat-label>
+    <mat-select formControlName="busId">
+      <mat-option *ngFor="let bus of buses" [value]="bus.idBus">
+        {{ bus.placa }} - {{ bus.modelo }}
+      </mat-option>
+    </mat-select>
+    <mat-error *ngIf="solicitudForm.get('busId')?.hasError('required')">
+      Bus es requerido
+    </mat-error>
+  </mat-form-field>
+
+  <div class="button-row" style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px;">
+    <button mat-stroked-button color="warn" type="button" (click)="onCancel()">
+      Cancelar
+    </button>
+    <button mat-flat-button color="primary" type="submit" [disabled]="solicitudForm.invalid">
+      {{ isEditMode ? 'Actualizar' : 'Guardar' }}
+    </button>
+  </div>
+</form>

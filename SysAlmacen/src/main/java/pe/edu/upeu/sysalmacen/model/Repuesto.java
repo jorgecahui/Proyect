@@ -1,27 +1,37 @@
 package pe.edu.upeu.sysalmacen.model;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Min;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "repuestos")
+@Table(name = "Repuesto")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 public class Repuesto {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_repuesto")
-    private Long id;
+    private Long idRepuesto;
 
-    @Column(name = "nombre", nullable = false, unique = true, length = 100)
-    private String nombre;
+    @Column(nullable = false, length = 100)
+    private String re_nombre;
 
-    @Min(0)
-    @Column(name = "stock_actual", nullable = false)
-    private int stockActual;
+    @Column(nullable = false)
+    private String re_stock_actual;
+
+    @Column(nullable = false, length = 20)
+    private String re_codigo;
+
+    @Column(nullable = false, length = 50)
+    private String re_ubicacion;
+
+    @Column(nullable = false)
+    private String re_estado; // activo, mantenimiento, inactivo
+
+    @Column(nullable = false)
+    private String re_stock_minimo;
 }
-

@@ -1,6 +1,11 @@
 export class Repuesto {
   constructor(
-    public id: number | null = null,
-    public nombre: string = ''
+    public idRepuesto: number,
+    public nombre: string,
+    public stockActual: string,
+    public codigo: string,
+    public ubicacion: string,
+    public estado: string,
+    public stockMinimo: string
   ) {}
 }

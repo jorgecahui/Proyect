@@ -7,7 +7,7 @@
         <mat-icon>close</mat-icon>
       }
     </button>
-    <span>HOME</span>
+    <span>San Martin</span>
     <span class="example-spacer"></span>
     <span class="example-spacer"> </span>
     <button mat-icon-button [matMenuTriggerFor]="themeMenu" >
@@ -34,11 +34,11 @@
     <mat-menu #menu="matMenu">
       <button mat-menu-item >
         <mat-icon>account_box</mat-icon>
-        <span>mi cuenta</span>
+        <span>My account</span>
       </button>
       <button mat-menu-item (click)="sidenav.opened = false" (click)="logout()" >
         <mat-icon>exit_to_app</mat-icon>
-        <span>cerrar sesión</span>
+        <span>Logout</span>
       </button>
     </mat-menu>
   </mat-toolbar>
@@ -46,7 +46,7 @@
 
   <mat-sidenav-container class="example-sidenav-container">
     <mat-sidenav #sidenav style="width: 250px" mode="over">
-      <img src="8ad9743f-cc5f-4a4a-af37-51c0664ecb6d.png" width="128" style="margin-left: 20px">
+      <img src="images.png" width="128" style="margin-left: 20px">
 
     <!--
       @for (m of accesos; track $index) {
@@ -62,41 +62,46 @@
       <button class="myButton" mat-menu-item (click)="sidenav.toggle()"
               routerLink="/pages/dashboard" [routerLinkActive]="['active']" style="cursor: pointer">
         <mat-icon>scanner</mat-icon>
-        <span>Registro de Repuestos</span>
+        <span>Carrito</span>
       </button>
 
       <button class="myButton" mat-menu-item (click)="sidenav.toggle()"
               routerLink="/pages/mattable" [routerLinkActive]="['active']" style="cursor: pointer">
         <mat-icon>commute</mat-icon>
-        <span>Solicitudes</span>
+        <span>Carrito</span>
       </button>
-      <!--
 
       <button class="myButton" mat-menu-item (click)="sidenav.toggle()"
               routerLink="/pages/marca" [routerLinkActive]="['active']" style="cursor: pointer">
         <mat-icon>commute</mat-icon>
-        <span>Recepcion</span>
+        <span>Marca</span>
       </button>
-      -->
-      
-      <button class="myButton" mat-menu-item (click)="sidenav.toggle()"
-              routerLink="/pages/recepcion" [routerLinkActive]="['active']" style="cursor: pointer">
-        <mat-icon>inventory_2</mat-icon>
-        <span>Recepción de Repuestos</span>
-      </button>
-
-      <button class="myButton" mat-menu-item (click)="sidenav.toggle()"
-              routerLink="/pages/salida" [routerLinkActive]="['active']" style="cursor: pointer">
-        <mat-icon>exit_to_app</mat-icon>
-        <span>Salida de Repuestos</span>
-      </button>
-      <!--
       <button class="myButton" mat-menu-item (click)="sidenav.toggle()"
               routerLink="/pages/product" [routerLinkActive]="['active']" style="cursor: pointer">
         <mat-icon>commute</mat-icon>
-        <span>Registrar Salida</span>
+        <span>Producto</span>
       </button>
-      -->
+      <button class="myButton" mat-menu-item (click)="sidenav.toggle()"
+              routerLink="/pages/registro" [routerLinkActive]="['active']" style="cursor: pointer">
+        <mat-icon>commute</mat-icon>
+        <span>Registro</span>
+      </button>
+      <button class="myButton" mat-menu-item (click)="sidenav.toggle()"
+              routerLink="/pages/gestionar_visualizar" [routerLinkActive]="['active']" style="cursor: pointer">
+        <mat-icon>commute</mat-icon>
+        <span>gestionar-compras</span>
+      </button>
+      <button class="myButton" mat-menu-item (click)="sidenav.toggle()"
+              routerLink="/pages/solicitudre" [routerLinkActive]="['active']" style="cursor: pointer">
+        <mat-icon>commute</mat-icon>
+        <span>Solicitar_repuesto</span>
+      </button>
+      <button class="myButton" mat-menu-item (click)="sidenav.toggle()"
+              routerLink="/pages/registro_soliciitudre" [routerLinkActive]="['active']" style="cursor: pointer">
+        <mat-icon>commute</mat-icon>
+        <span>Solicitar_repuesto2.0</span>
+      </button>
+
 
        <!--
       <mat-divider></mat-divider>

@@ -8,7 +8,6 @@ import {environment} from '../environments/environment.development';
 import {authInterceptor} from './interceptor/auth.interceptor';
 import {JwtModule} from '@auth0/angular-jwt';
 import {ServeErrorsInterceptor} from './interceptor/server-error.interceptor';
-import { API_URL } from './tokens/api-url.token';
 
 
 export function tokenGetter() {
@@ -30,12 +29,6 @@ export const appConfig: ApplicationConfig = {
         },
       })
     ),
-    
-    {
-      provide: API_URL,
-      useValue: `${environment.HOST}/api` // 👈 Valor de tu token de URL
-    },
-
     {provide:HTTP_INTERCEPTORS,
     useClass: ServeErrorsInterceptor,
     multi: true

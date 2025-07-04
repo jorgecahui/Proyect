@@ -12,7 +12,7 @@ public interface IAccesoRepository extends ICrudGenericoRepository<Acceso, Long>
      INNER JOIN upeu_usuario_rol ur ON (ur.rol_id=ar.rol_id)
      INNER JOIN upeu_accesos a ON (a.id_acceso=ar.acceso_id)
      INNER JOIN upeu_usuario u ON (u.id_usuario=ur.usuario_id)
-     WHERE u.user=:username
+     WHERE u.username='AAA@upeu.edu.pe'
  """, nativeQuery = true)
     List<Acceso> getAccesoByUser(@Param("username") String username);
 }
