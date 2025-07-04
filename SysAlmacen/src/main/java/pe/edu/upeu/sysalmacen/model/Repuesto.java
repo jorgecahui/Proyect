@@ -1,6 +1,7 @@
 package pe.edu.upeu.sysalmacen.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Min;
 import lombok.*;
 
 @Entity
@@ -19,6 +20,7 @@ public class Repuesto {
     @Column(name = "nombre", nullable = false, unique = true, length = 100)
     private String nombre;
 
+    @Min(0)
     @Column(name = "stock_actual", nullable = false)
     private int stockActual;
 }

@@ -17,34 +17,34 @@ public class RepuestoService {
 
     private final RepuestoRepository repuestoRepository;
 
-    // 👉 Listar todos los repuestos (entidades completas)
+
     public List<Repuesto> listar() {
         return repuestoRepository.findAll();
     }
 
-    // 👉 Listar como DTO (solo id y nombre)
+
     public List<RepuestoDTO> listarDto() {
         return repuestoRepository.findAll().stream()
                 .map(r -> new RepuestoDTO(r.getId(), r.getNombre()))
                 .collect(Collectors.toList());
     }
 
-    // 👉 Buscar por id
+
     public Optional<Repuesto> buscarPorId(Long id) {
         return repuestoRepository.findById(id);
     }
 
-    // 👉 Registrar
+
     public Repuesto registrar(Repuesto repuesto) {
         return repuestoRepository.save(repuesto);
     }
 
-    // 👉 Actualizar
+
     public Repuesto actualizar(Repuesto repuesto) {
         return repuestoRepository.save(repuesto);
     }
 
-    // 👉 Eliminar
+
     public void eliminar(Long id) {
         repuestoRepository.deleteById(id);
     }

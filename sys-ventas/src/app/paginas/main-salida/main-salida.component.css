@@ -1,10 +1,8 @@
-
 .contenedor-salida {
   padding: 2rem;
   background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
   min-height: 100vh;
 }
-
 
 .titulo-toolbar {
   font-size: 26px;
@@ -14,15 +12,13 @@
   border-radius: 12px;
   padding: 1rem 1.5rem;
   margin-bottom: 2rem;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
-
 
 .campo-busqueda {
   width: 100%;
   margin-bottom: 1.5rem;
 }
-
 
 .tabla-contenedor {
   overflow-x: auto;
@@ -30,26 +26,34 @@
   backdrop-filter: blur(10px);
   border-radius: 12px;
   padding: 1.5rem;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.12);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
+  animation: fadeIn 0.5s ease;
 }
-
 
 table {
   width: 100%;
   border-collapse: collapse;
 }
 
-
-tr.mat-row:nth-child(even) {
-  background-color: rgba(240,240,240,0.6);
+/* Alineación y consistencia de todas las celdas */
+td.mat-cell,
+th.mat-header-cell {
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 16px;
+  padding-right: 16px;
+  vertical-align: middle;
+  height: 56px;
 }
 
+tr.mat-row:nth-child(even) {
+  background-color: rgba(240, 240, 240, 0.6);
+}
 
 th.mat-header-cell {
   font-weight: 600;
   color: #333;
 }
-
 
 .estado-pendiente {
   background-color: #ffeb3b !important;
@@ -67,30 +71,58 @@ th.mat-header-cell {
   border-radius: 8px;
 }
 
+/* Corrección visual de la columna acción */
+.accion-cell {
+  padding: 0 !important;
+  margin: 0 !important;
+  height: 56px;
+  display: flex;
+  align-items: center;
+}
 
+/* Grupo de botones alineados */
+.acciones-grupo {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding: 0 8px;
+  gap: 12px;
+}
+
+.acciones-izquierda {
+  display: flex;
+  gap: 6px;
+}
+
+/* Botón PDF más grande y a la derecha */
+.pdf-boton {
+  transform: scale(1.3);
+  margin-left: auto;
+}
+
+/* Animación de botones */
 button[mat-icon-button] {
   transition: background-color 0.3s ease, transform 0.2s ease;
   margin-right: 6px;
 }
 
 button[mat-icon-button]:hover {
-  background-color: rgba(63,81,181,0.1);
+  background-color: rgba(63, 81, 181, 0.1);
   border-radius: 50%;
   transform: scale(1.1);
 }
 
-
 .mat-tooltip {
   font-size: 13px;
 }
-
 
 mat-paginator {
   margin-top: 1rem;
   background: transparent;
 }
 
-
+/* Responsive */
 @media (max-width: 768px) {
   .titulo-toolbar {
     font-size: 22px;
@@ -107,12 +139,9 @@ mat-paginator {
   }
 }
 
-
+/* Animación fadeIn para tabla */
 @keyframes fadeIn {
-  0% { opacity: 0; transform: translateY(20px);}
-  100% { opacity: 1; transform: translateY(0);}
+  0% { opacity: 0; transform: translateY(20px); }
+  100% { opacity: 1; transform: translateY(0); }
 }
 
-.tabla-contenedor {
-  animation: fadeIn 0.5s ease;
-}

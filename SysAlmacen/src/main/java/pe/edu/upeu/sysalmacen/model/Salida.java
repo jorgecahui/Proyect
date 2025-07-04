@@ -6,12 +6,12 @@ import lombok.*;
 
 import java.time.LocalDate;
 
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
-@Data
 @Entity
 @Table(name = "salidas")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Salida {
 
     @Id
@@ -19,7 +19,7 @@ public class Salida {
     @Column(name = "id_salida")
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_repuesto", nullable = false)
     private Repuesto repuesto;
 

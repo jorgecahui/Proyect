@@ -17,6 +17,9 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MaterialModule } from '../../material/material.module';
 
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
+
 @Component({
   selector: 'app-main-salida',
   standalone: true,
@@ -69,15 +72,13 @@ export class MainSalidaComponent implements OnInit {
       this.repuestos = res;
 
       this.salidaService.findAll().subscribe(data => {
-        console.log(data); 
         this.dataSource = new MatTableDataSource(data);
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
 
-        
         this.dataSource.filterPredicate = (data: Salida, filter: string) => {
           const texto = filter.trim().toLowerCase();
-          const nombreRepuesto = this.nombreRepuesto(data.idRepuesto).toLowerCase();
+          const nombreRepuesto = data.nombreRepuesto?.toLowerCase() ?? '';
           return (
             nombreRepuesto.includes(texto) ||
             data.destinatario.toLowerCase().includes(texto) ||
@@ -104,7 +105,34 @@ export class MainSalidaComponent implements OnInit {
       this.cargarDatos();
     });
   }
+
+  generarPDF(salida: Salida) {
+    const doc = new jsPDF();
+
+    doc.setFontSize(16);
+    doc.text('Detalle de Salida de Repuesto', 14, 20);
+
+    const data = [
+      ['ID', salida.id],
+      ['Código', salida.codigo],
+      ['Repuesto', this.nombreRepuesto(salida.idRepuesto)],
+      ['Cantidad Entregada', salida.cantidadEntregada],
+      ['Destinatario', salida.destinatario],
+      ['Fecha de Salida', new Date(salida.fechaSalida).toLocaleDateString()],
+      ['Estado', salida.estado]
+    ];
+
+    autoTable(doc, {
+      startY: 30,
+      head: [['Campo', 'Valor']],
+      body: data
+    });
+
+    doc.save(`salida-${salida.id}.pdf`);
+  }
 }
+
+
 
 
 

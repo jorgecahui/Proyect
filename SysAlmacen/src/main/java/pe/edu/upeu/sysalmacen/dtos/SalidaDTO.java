@@ -14,11 +14,20 @@ import java.time.LocalDate;
 @Builder
 public class SalidaDTO {
     private Long id;
-    private Long idRepuesto; // referencia al repuesto
-    private String nombreRepuesto; // opcional, para mostrar en listados
+
+    @NotNull(message = "El ID del repuesto es obligatorio")
+    private Long idRepuesto;
+
+    private String nombreRepuesto;
+
     private int cantidadEntregada;
+
     private String destinatario;
+
     private String codigo;
+
     private LocalDate fechaSalida;
+
     private String estado;
+
 }
