@@ -1,6 +1,5 @@
 package pe.edu.upeu.sysalmacen.service.impl;
 
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import pe.edu.upeu.sysalmacen.dtos.SalidaDTO;
