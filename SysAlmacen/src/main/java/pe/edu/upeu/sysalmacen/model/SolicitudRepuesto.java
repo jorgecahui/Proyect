@@ -2,7 +2,6 @@ package pe.edu.upeu.sysalmacen.model;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -13,7 +12,7 @@ import java.time.LocalDate;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
+
 public class SolicitudRepuesto {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,7 +20,7 @@ public class SolicitudRepuesto {
     private Long id_SolicitudRepuesto;
 
     @Column(name = "so_cantidad", nullable = false)
-    private int cantidad;
+    private String cantidad;
 
     @Column(nullable = false, name = "so_estado")
     private String estado;

@@ -8,6 +8,6 @@ import java.util.Optional;
 
 public interface IRepuestoRepository extends ICrudGenericoRepository <Repuesto, Long>{
     @Query("SELECT r FROM Repuesto r WHERE r.nombre = :nombre")
-    Optional<Repuesto> buscarPorNombre(@Param("nombre") String nombre);
+    Optional<Repuesto> findByNombre(@Param("nombre") String nombre);
 
 }

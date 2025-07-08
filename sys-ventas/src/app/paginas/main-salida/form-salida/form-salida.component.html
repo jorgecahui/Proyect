@@ -64,9 +64,10 @@
     <button mat-raised-button color="primary" type="submit" [disabled]="form.invalid">
       {{ isEdit ? 'Actualizar' : 'Guardar' }}
     </button>
-    <button mat-raised-button color="warn" routerLink="/pages/salida" style="margin-left: 1rem;">
+    <button mat-raised-button color="warn" (click)="cancelar()" style="margin-left: 1rem;">
       Cancelar
     </button>
+
   </div>
 </form>
 

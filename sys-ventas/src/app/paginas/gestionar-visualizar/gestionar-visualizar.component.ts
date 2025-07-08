@@ -3,8 +3,6 @@ import { MaterialModule } from '../../material/material.module';
 import { RouterLink, RouterOutlet } from '@angular/router';
 import {MatNavList} from '@angular/material/list';
 import {NgClass} from '@angular/common';
-import jsPDF from 'jspdf';
-import html2canvas from 'html2canvas';
 
 @Component({
   selector: 'app-gestionar-visualizar',
@@ -45,19 +43,4 @@ export class GestionarVisualizarComponent {
       'red': 'status-denied',
     }[color] || '';
   }
-  generatePDF(element: any) {
-   const doc = new jsPDF();
-
-   doc.setFontSize(16);
-   doc.text(`Solicitud N°: #${element.id}`, 10, 20);
-   doc.setFontSize(12);
-   doc.text(`Título: ${element.title}`, 10, 30);
-   doc.text(`Fecha: ${element.date}`, 10, 40);
-   doc.text(`Mecánico: ${element.mechanic}`, 10, 50);
-   doc.text(`Prioridad: ${element.priority}`, 10, 60);
-   doc.text(`Estado: ${element.status}`, 10, 70);
-
-   doc.save(`solicitud_${element.id}.pdf`);
-  }
-
 }

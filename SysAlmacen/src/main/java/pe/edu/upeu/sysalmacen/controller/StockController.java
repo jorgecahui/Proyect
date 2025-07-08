@@ -20,5 +20,7 @@ public class StockController {
         int stock = stockService.consultarStock(idRepuesto);
         return ResponseEntity.ok(stock);
     }
+
+
 }
 
