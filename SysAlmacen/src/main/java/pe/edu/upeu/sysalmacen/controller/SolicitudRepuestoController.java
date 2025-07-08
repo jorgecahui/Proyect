@@ -4,22 +4,16 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import pe.edu.upeu.sysalmacen.dtos.SolicitudRepuestoDTO;
 import pe.edu.upeu.sysalmacen.mappers.SolicitudRepuestoMapper;
-import pe.edu.upeu.sysalmacen.model.SolicitudAprobada;
 import pe.edu.upeu.sysalmacen.model.SolicitudRepuesto;
-import pe.edu.upeu.sysalmacen.repository.ISolicitudAprobadaRepository;
-import pe.edu.upeu.sysalmacen.repository.ISolicitudRepuestoRepository;
 import pe.edu.upeu.sysalmacen.service.ISolicitudRepuestoService;
 
 
 import java.net.URI;
-import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -30,8 +24,6 @@ import java.util.List;
 public class SolicitudRepuestoController {
     private final ISolicitudRepuestoService solicitudRepuestoService;
     private final SolicitudRepuestoMapper solicitudRepuestoMapper;
-    private final ISolicitudAprobadaRepository solicitudAprobadaRepo;
-    private final ISolicitudRepuestoRepository solicitudRepo;
 
     @GetMapping
     public ResponseEntity<List<SolicitudRepuestoDTO>> findAll() {
@@ -60,23 +52,7 @@ public class SolicitudRepuestoController {
                 .toUri();
         return ResponseEntity.created(location).build();
     }
-    @PostMapping("/solicitudes/{id}/aprobar")
-    public ResponseEntity<?> aprobarSolicitud(@PathVariable Long id) {
-        SolicitudRepuesto solicitud = solicitudRepo.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Solicitud no encontrada"));
 
-        solicitud.setEstado("Aprobado");
-        solicitudRepo.save(solicitud);
-
-        SolicitudAprobada aprobada = new SolicitudAprobada();
-        aprobada.setFechaAprobacion(LocalDate.now());
-        aprobada.setUsuario(solicitud.getUsuario());
-        aprobada.setSolicitud(solicitud);
-
-        solicitudAprobadaRepo.save(aprobada);
-
-        return ResponseEntity.ok("Solicitud aprobada y registrada");
-    }
     @PutMapping("/{id}")
     public ResponseEntity<SolicitudRepuestoDTO> update(@Valid @PathVariable("id") Long id,
                                                   @RequestBody SolicitudRepuestoDTO dto) {
