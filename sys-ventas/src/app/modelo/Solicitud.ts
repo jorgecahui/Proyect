@@ -1,8 +1,7 @@
 export interface Solicitud {
-  id?: number;
-  titulo: string;
-  fecha: string;
-  mecanico: string;
-  prioridad: string;
-  estado: string;
+  id_solicitud_compra: number;  // Asegúrate de que coincida con el nombre de la propiedad en el JSON del backend.
+  sc_cantidad: number;
+  sc_estado: string;
+  id_proveedor: number;
+  id_repuesto: number;
 }
