@@ -31,10 +31,10 @@ public class SolicitudRepuestoServiceImp extends CrudGenericoServiceImp<Solicitu
         solicitud.setUsuario(usuarioRepo.findById(dto.getIdUsuario())
                 .orElseThrow(() -> new EntityNotFoundException("Usuario no encontrado")));
 
-        solicitud.setRepuesto(repuestoRepo.findById(dto.getNombreRepuesto())
+        solicitud.setRepuesto(repuestoRepo.findByNombre(dto.getNombre())
                 .orElseThrow(() -> new EntityNotFoundException("Repuesto no encontrado")));
 
-        solicitud.setBus(busRepo.findById(dto.getPlacaBus())
+        solicitud.setBus(busRepo.findById(dto.getPlaca())
                 .orElseThrow(() -> new EntityNotFoundException("Bus no encontrado")));
 
         return repo.save(solicitud);

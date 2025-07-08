@@ -42,7 +42,7 @@ public class SolicitudRepuestoController {
         return ResponseEntity.ok(pageDTO);
     }
 
-    @PostMapping("/guardar")
+    @PostMapping
     public ResponseEntity<Void> save(@Valid @RequestBody SolicitudRepuestoDTO dto) {
         System.out.println("holla_us_dto_12");
         SolicitudRepuesto obj = solicitudRepuestoService.save(solicitudRepuestoMapper.toEntity(dto));
@@ -55,7 +55,7 @@ public class SolicitudRepuestoController {
     @PutMapping("/{id}")
     public ResponseEntity<SolicitudRepuestoDTO> update(@Valid @PathVariable("id") Long id,
                                                   @RequestBody SolicitudRepuestoDTO dto) {
-        dto.setIdSolicitudRepuesto(id);
+        dto.setId_SolicitudRepuesto(id);
         SolicitudRepuesto obj = solicitudRepuestoService.update(id, solicitudRepuestoMapper.toEntity(dto));
         return ResponseEntity.ok(solicitudRepuestoMapper.toDTO(obj));
     }
