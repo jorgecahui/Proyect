@@ -38,7 +38,7 @@ export class SolicitudRepuestoListComponent implements OnInit {
   columnsDefinitions = [
     { def: 'idSolicitudRepuesto', label: 'ID', hide: true },
     { def: 'fecha', label: 'Fecha', hide: false },
-    { def: 'placaBus', label: 'Bus (Placa)', hide: false },
+    { def: 'Busplaca', label: 'Bus (Placa)', hide: false },
     { def: 'nombreRepuesto', label: 'Repuesto', hide: false },
     { def: 'cantidad', label: 'Cantidad', hide: false },
     { def: 'estado', label: 'Estado', hide: false },

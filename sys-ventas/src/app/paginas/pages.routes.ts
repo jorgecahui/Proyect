@@ -45,7 +45,8 @@ export const pagesRoutes: Routes = [
     path: 'gestionar_visualizar',
     component: GestionarVisualizarComponent,
     children: [
-      { path: 'new', component: AddGestionarComponent }
+      { path: 'new', component: AddGestionarComponent },
+      { path: 'edit/:id', component: AddGestionarComponent },
     ],
   },
   {

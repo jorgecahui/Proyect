@@ -37,8 +37,9 @@ export class SolicitudRepuestoDTO {
     public cantidad?: number,
     public motivo?: string,
     public estado?: 'Pendiente' | 'Aprobado' | 'Rechazado',
-    public usuarioId?: number,
-    public repuestoId?: number,
-    public busId?: number
+    public idRepuesto?: number,
+    public idUsuario?: number,
+    public idBus?: number,
+    public placa?: string
   ) {}
 }

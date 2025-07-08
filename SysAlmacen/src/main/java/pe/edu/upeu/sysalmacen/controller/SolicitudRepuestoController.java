@@ -52,6 +52,7 @@ public class SolicitudRepuestoController {
                 .toUri();
         return ResponseEntity.created(location).build();
     }
+
     @PutMapping("/{id}")
     public ResponseEntity<SolicitudRepuestoDTO> update(@Valid @PathVariable("id") Long id,
                                                   @RequestBody SolicitudRepuestoDTO dto) {
