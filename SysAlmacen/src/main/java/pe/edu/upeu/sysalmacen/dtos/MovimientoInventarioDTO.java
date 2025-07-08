@@ -9,5 +9,5 @@ public class MovimientoInventarioDTO {
     private String tipo;
     private String cantidad;
     private LocalDate fecha;
-    private Integer idRepuesto;
+    private Long idRepuesto;
 }

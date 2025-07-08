@@ -19,37 +19,44 @@ import java.util.List;
 @CrossOrigin("*")
 
 public class MovimientoInventarioController {
-    private final IMovimientoInventarioService movimientoInventarioService ;
-    private final MovimientoInvetarioMapper movimientoInvetarioMapper;
+    private final IMovimientoInventarioService service ;
+    private final MovimientoInvetarioMapper mapper;
 
     @GetMapping
     public ResponseEntity<List<MovimientoInventarioDTO>> listarTodos() {
-        return ResponseEntity.ok(movimientoInvetarioMapper.toDTOs(movimientoInventarioService.findAll()));
+        return ResponseEntity.ok(mapper.toDTOs(service.findAll()));
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<MovimientoInventarioDTO> obtenerPorId(@PathVariable Integer id) {
-        return ResponseEntity.ok(movimientoInvetarioMapper.toDTO(movimientoInventarioService.findById(id)));
+        return ResponseEntity.ok(mapper.toDTO(service.findById(id)));
     }
 
     @PostMapping
-    public ResponseEntity<Void> crear(@Valid @RequestBody MovimientoInventarioDTO dto) {
-        MovimientoInventario creado = movimientoInventarioService.save(movimientoInvetarioMapper.toEntity(dto));
-        URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
-                .buildAndExpand(creado.getId_MovimientoInventario()).toUri();
-        return ResponseEntity.created(location).build();
+    public ResponseEntity<MovimientoInventarioDTO> registrar(@Valid @RequestBody MovimientoInventarioDTO dto) {
+        MovimientoInventario entity = mapper.toEntity(dto);
+        MovimientoInventario saved = service.registrar(entity);
+        MovimientoInventarioDTO response = mapper.toDTO(saved);
+
+        URI location = ServletUriComponentsBuilder
+                .fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(saved.getIdMovimientoInventario())
+                .toUri();
+
+        return ResponseEntity.created(location).body(response);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<MovimientoInventarioDTO> actualizar(@PathVariable Integer id, @Valid @RequestBody MovimientoInventarioDTO dto) {
         dto.setIdMovimientoInventario(id);
-        MovimientoInventario actualizado = movimientoInventarioService.update(id, movimientoInvetarioMapper.toEntity(dto));
-        return ResponseEntity.ok(movimientoInvetarioMapper.toDTO(actualizado));
+        MovimientoInventario actualizado = service.update(id, mapper.toEntity(dto));
+        return ResponseEntity.ok(mapper.toDTO(actualizado));
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> eliminar(@PathVariable Integer id) {
-        movimientoInventarioService.delete(id);
+        service.delete(id);
         return ResponseEntity.noContent().build();
     }
 }
