@@ -6,19 +6,21 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "SolicitudCompra")
+@Table(name = "solicitud_compra")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class SolicitudCompra {
     @Id
-    private Integer id_SolicitudCompra;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_solicitud_compra")
+    private Integer idSolicitudCompra;
 
-    @Column(nullable = false)
-    private String sc_cantidad;
+    @Column(nullable = false, name = "SC_CANTIDAD")
+    private String cantidad;
 
-    @Column(nullable = false)
-    private String sc_estado;
+    @Column(nullable = false, name = "SC_ESTADO")
+    private String estado;
 
     @ManyToOne
     @JoinColumn(name = "id_proveedor", nullable = false)

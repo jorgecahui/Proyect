@@ -43,7 +43,7 @@ public class BusController {
 
     @PutMapping("/{placaBus}")
     public ResponseEntity<BusDTO> actualizar(@PathVariable String placaBus, @Valid @RequestBody BusDTO dto) {
-        dto.setPlaca(placaBus);
+        dto.setBu_placa(placaBus);
         Bus actualizado = busService.update(placaBus, busMapper.toEntity(dto));
         return ResponseEntity.ok(busMapper.toDTO(actualizado));
     }

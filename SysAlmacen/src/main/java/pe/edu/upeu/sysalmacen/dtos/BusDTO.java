@@ -6,7 +6,7 @@ import lombok.Data;
 
 public class BusDTO {
     private Long idBus;
-    private String placa;
-    private String modelo;
-    private String estado;
+    private String bu_placa;
+    private String bu_modelo;
+    private String bu_estado;
 }

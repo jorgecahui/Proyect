@@ -7,11 +7,11 @@ import java.time.LocalDate;
 
 public class SolicitudRepuestoDTO {
     private Long idSolicitudRepuesto;
-    private LocalDate fecha;
     private String cantidad;
-    private String motivo;
     private String estado;
+    private LocalDate fecha;
+    private String motivo;
     private Long idUsuario;
-    private String nombreRepuesto;
+    private Long nombreRepuesto;
     private String placaBus;
 }

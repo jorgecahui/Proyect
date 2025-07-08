@@ -1,8 +1,7 @@
 package pe.edu.upeu.sysalmacen.repository;
 
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import pe.edu.upeu.sysalmacen.model.Cliente;
+
 import pe.edu.upeu.sysalmacen.model.Marca;
 
 import java.util.Optional;

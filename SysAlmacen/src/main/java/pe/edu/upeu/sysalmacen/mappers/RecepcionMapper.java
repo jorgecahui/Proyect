@@ -11,12 +11,12 @@ public interface RecepcionMapper {
 
     @Mappings({
             @Mapping(source = "idRepuesto", target = "repuesto"),
-            @Mapping(target = "id", ignore = true)
+            @Mapping(target = "id", ignore = true) // Se ignora si la ID es autogenerada
     })
     Recepcion toEntity(RecepcionDTO dto);
 
     @Mappings({
-            @Mapping(source = "repuesto.id", target = "idRepuesto"),
+            @Mapping(source = "repuesto.idRepuesto", target = "idRepuesto"),
             @Mapping(source = "repuesto.nombre", target = "nombreRepuesto")
     })
     RecepcionDTO toDto(Recepcion entity);

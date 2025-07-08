@@ -21,6 +21,7 @@
     "@angular/router": "^19.2.0",
     "@auth0/angular-jwt": "^5.2.0",
     "jspdf": "^3.0.1",
+    "jspdf-autotable": "^5.0.2",
     "ng2-pdf-viewer": "^10.4.0",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",

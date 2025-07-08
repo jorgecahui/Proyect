@@ -1,4 +1,5 @@
 export class Repuesto {
+  id: any;
   constructor(
     public idRepuesto: number,
     public nombre: string,

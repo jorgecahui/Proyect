@@ -17,21 +17,21 @@ public class Repuesto {
     @Column(name = "id_repuesto")
     private Long idRepuesto;
 
-    @Column(nullable = false, length = 100)
-    private String re_nombre;
+    @Column(nullable = false, length = 100, name = "re_nombre")
+    private String nombre;
 
-    @Column(nullable = false)
-    private String re_stock_actual;
+    @Column(nullable = false, name = "re_stock_actual" )
+    private int  stockActual;
 
-    @Column(nullable = false, length = 20)
-    private String re_codigo;
+    @Column(nullable = false, length = 20, name = "re_codigo")
+    private String codigo;
 
-    @Column(nullable = false, length = 50)
-    private String re_ubicacion;
+    @Column(nullable = false, length = 50, name = "re_ubicacion")
+    private String ubicacion;
 
-    @Column(nullable = false)
-    private String re_estado; // activo, mantenimiento, inactivo
+    @Column(nullable = false, name = "re_estado")
+    private String estado; // activo, mantenimiento, inactivo
 
-    @Column(nullable = false)
-    private String re_stock_minimo;
+    @Column(nullable = false, name = "re_stock_minimo")
+    private int  stockMinimo;
 }

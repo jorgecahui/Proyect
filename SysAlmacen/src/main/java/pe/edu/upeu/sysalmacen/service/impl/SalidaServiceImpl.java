@@ -8,7 +8,7 @@ import pe.edu.upeu.sysalmacen.exception.SalidaNotFoundException;
 import pe.edu.upeu.sysalmacen.mappers.SalidaMapper;
 import pe.edu.upeu.sysalmacen.model.Repuesto;
 import pe.edu.upeu.sysalmacen.model.Salida;
-import pe.edu.upeu.sysalmacen.repository.RepuestoRepository;
+import pe.edu.upeu.sysalmacen.repository.IRepuestoRepository;
 import pe.edu.upeu.sysalmacen.repository.SalidaRepository;
 import pe.edu.upeu.sysalmacen.service.SalidaService;
 
@@ -19,7 +19,7 @@ import java.util.List;
 public class SalidaServiceImpl implements SalidaService {
 
     private final SalidaRepository salidaRepository;
-    private final RepuestoRepository repuestoRepository;
+    private final IRepuestoRepository repuestoRepository;
     private final SalidaMapper salidaMapper;
 
     @Override

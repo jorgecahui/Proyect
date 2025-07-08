@@ -14,8 +14,8 @@ public interface SalidaMapper {
 
     // Entidad a DTO
     @Mapping(source = "id", target = "id")
-    @Mapping(source = "repuesto.id", target = "idRepuesto")
-    @Mapping(source = "repuesto.nombre", target = "nombreRepuesto")
+    @Mapping(source = "repuesto.idRepuesto", target = "idRepuesto")
+    @Mapping(source = "repuesto.nombre", target = "nombreRepuesto") // corregido
     @Mapping(source = "cantidadEntregada", target = "cantidadEntregada")
     @Mapping(source = "destinatario", target = "destinatario")
     @Mapping(source = "codigo", target = "codigo")
@@ -25,7 +25,7 @@ public interface SalidaMapper {
 
     // DTO a entidad
     @Mapping(source = "id", target = "id")
-    @Mapping(source = "idRepuesto", target = "repuesto") // Usará RepuestoMapperHelper.fromId()
+    @Mapping(source = "idRepuesto", target = "repuesto") // requiere helper
     @Mapping(source = "cantidadEntregada", target = "cantidadEntregada")
     @Mapping(source = "destinatario", target = "destinatario")
     @Mapping(source = "codigo", target = "codigo")

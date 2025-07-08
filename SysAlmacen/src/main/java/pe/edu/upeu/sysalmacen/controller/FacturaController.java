@@ -14,7 +14,7 @@ import java.net.URI;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/Factura")
+@RequestMapping("/api/factura")
 @RequiredArgsConstructor
 @CrossOrigin("*")
 
@@ -36,7 +36,7 @@ public class FacturaController {
     public ResponseEntity<Void> crear(@Valid @RequestBody FacturaDTO dto) {
         Factura creado = facturaService.save(facturaMapper.toEntity(dto));
         URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
-                .buildAndExpand(creado.getId_Factura()).toUri();
+                .buildAndExpand(creado.getIdFactura()).toUri();
         return ResponseEntity.created(location).build();
     }
 

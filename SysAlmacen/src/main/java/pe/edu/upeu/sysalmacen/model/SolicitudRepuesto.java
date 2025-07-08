@@ -20,16 +20,16 @@ public class SolicitudRepuesto {
     private Long id_SolicitudRepuesto;
 
     @Column(name = "so_cantidad", nullable = false)
-    private String so_cantidad;
+    private String cantidad;
 
-    @Column(name = "so_estado", nullable = false)
-    private String so_estado;
+    @Column(nullable = false, name = "so_estado")
+    private String estado;
 
     @Column(name = "so_fecha", nullable = false)
-    private LocalDate so_fecha;
+    private LocalDate fecha;
 
-    @Column(nullable = false)
-    private String so_motivo;
+    @Column(nullable = false, name = "so_motivo")
+    private String motivo;
 
     @ManyToOne
     @JoinColumn(name = "id_usuario", nullable = false)

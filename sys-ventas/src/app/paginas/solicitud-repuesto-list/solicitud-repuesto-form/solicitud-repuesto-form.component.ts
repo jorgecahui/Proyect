@@ -1,10 +1,11 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import {MatDialogRef, MAT_DIALOG_DATA, MatDialogTitle} from '@angular/material/dialog';
 import {SolicitudRepuestoService} from '../../../servicio/solicitudrepuesto.service';
 import {MatFormField, MatInput} from '@angular/material/input';
 import {MatOption, MatSelect} from '@angular/material/select';
 import {MatButton} from '@angular/material/button';
+import {NgForOf} from '@angular/common';
 
 @Component({
   selector: 'app-solicitud-repuesto-form',
@@ -15,7 +16,9 @@ import {MatButton} from '@angular/material/button';
     MatSelect,
     MatOption,
     MatButton,
-    MatInput
+    MatInput,
+    MatDialogTitle,
+    NgForOf
   ],
   styleUrls: ['./solicitud-repuesto-form.component.css']
 })

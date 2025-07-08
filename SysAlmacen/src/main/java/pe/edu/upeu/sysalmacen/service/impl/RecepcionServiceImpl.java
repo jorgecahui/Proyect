@@ -38,7 +38,7 @@ public class RecepcionServiceImpl implements RecepcionService {
         Recepcion saved = recepcionRepository.save(recepcion);
 
         // Actualizar stock del repuesto
-        stockService.incrementarStock(saved.getRepuesto().getId(), saved.getCantidadRecibida());
+        stockService.incrementarStock(saved.getRepuesto().getIdRepuesto(), saved.getCantidadRecibida());
 
         return recepcionMapper.toDto(saved);
     }

@@ -15,7 +15,7 @@ import java.net.URI;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/solicitudCompra")
+@RequestMapping("/api/solicitudcompra")
 @RequiredArgsConstructor
 @CrossOrigin("*")
 
@@ -39,7 +39,7 @@ public class SolicitudCompraController {
     public ResponseEntity<Void> crear(@Valid @RequestBody SolicitudCompraDTO dto) {
         SolicitudCompra creado = solicitudCompraService.save(solicitudCompraMapper.toEntity(dto));
         URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
-                .buildAndExpand(creado.getId_SolicitudCompra()).toUri();
+                .buildAndExpand(creado.getIdSolicitudCompra()).toUri();
         return ResponseEntity.created(location).build();
     }
 

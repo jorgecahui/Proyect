@@ -6,22 +6,26 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "Factura")
+@Table(name = "factura")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class Factura {
     @Id
-    private Integer id_Factura;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_factura")
+    private Integer idFactura;
 
-    private String fa_archivo_pdf;
+    @Column(name = "fa_archivo_pdf")
+    private String archivoPdf;
 
-    @Column(nullable = false, precision = 10, scale = 2)
-    private BigDecimal fa_fecha_subida;
+    @Column(name = "fecha_subida", nullable = false)
+    private LocalDateTime fechaSubida;
 
     @ManyToOne
-    @JoinColumn(name = "id_SolicitudCompra", nullable = false)
+    @JoinColumn(name = "id_solicitud_compra", nullable = false)
     private SolicitudCompra solicitudCompra;
 }
