@@ -1,46 +1,37 @@
 package pe.edu.upeu.sysalmacen.mappers;
 
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.Mappings;
+import org.mapstruct.*;
 import pe.edu.upeu.sysalmacen.dtos.FacturaDTO;
 import pe.edu.upeu.sysalmacen.model.Factura;
 import pe.edu.upeu.sysalmacen.model.SolicitudCompra;
+
 
 import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface FacturaMapper extends GenericMapper<FacturaDTO, Factura> {
 
-    // --- Métodos individuales con mapeo personalizado ---
-    @Mappings({
-            @Mapping(source = "solicitudCompra.idSolicitudCompra", target = "idSolicitudCompra")
-    })
+    @Mapping(target = "solicitudCompra", source = "idSolicitudCompra", qualifiedByName = "idToSolicitudCompra")
     @Override
-    FacturaDTO toDTO(Factura factura);
+    Factura toEntity(FacturaDTO dto);
 
-    @Mappings({
-            @Mapping(source = "idSolicitudCompra", target = "solicitudCompra")
-    })
+    @Mapping(source = "solicitudCompra.idSolicitudCompra", target = "idSolicitudCompra")
     @Override
-    Factura toEntity(FacturaDTO facturaDTO);
-
-    // --- Métodos para listas ---
-    @Override
-    List<FacturaDTO> toDTOs(List<Factura> facturas);
+    FacturaDTO toDTO(Factura entity);
 
     @Override
-    List<Factura> toEntities(List<FacturaDTO> facturaDTOs);
+    List<FacturaDTO> toDTOs(List<Factura> entities);
 
-    // --- Métodos auxiliares para convertir entre SolicitudCompra e Integer ---
-    default Integer map(SolicitudCompra solicitud) {
-        return solicitud != null ? solicitud.getIdSolicitudCompra() : null;
-    }
+    @Override
+    List<Factura> toEntities(List<FacturaDTO> dtos);
 
-    default SolicitudCompra map(Integer id) {
-        if (id == null) return null;
+    @Named("idToSolicitudCompra")
+    default SolicitudCompra idToSolicitudCompra(Integer id) {
+        if (id == null) {
+            return null;
+        }
         SolicitudCompra sc = new SolicitudCompra();
         sc.setIdSolicitudCompra(id);
-        return sc;
+        return sc; // Asume que existe constructor con ID
     }
 }

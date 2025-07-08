@@ -19,11 +19,11 @@ public class Bus {
     private Long idBus;
 
     @Column(nullable = false, length = 20, name = "bu_placa")
-    private String bu_placa;
+    private String placa;
 
     @Column(length = 50, name = "bu_modelo")
-    private String bu_modelo;
+    private String modelo;
 
     @Column(nullable = false, length = 30, name = "bu_estado")
-    private String bu_estado;
+    private String estado;
 }

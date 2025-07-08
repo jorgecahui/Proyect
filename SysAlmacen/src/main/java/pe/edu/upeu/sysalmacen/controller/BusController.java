@@ -36,14 +36,16 @@ public class BusController {
     @PostMapping
     public ResponseEntity<Void> crear(@Valid @RequestBody BusDTO dto) {
         Bus creado = busService.save(busMapper.toEntity(dto));
-        URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
-                .buildAndExpand(creado.getIdBus()).toUri();
+        URI location = ServletUriComponentsBuilder.fromCurrentRequest()
+                .path("/{placa}")
+                .buildAndExpand(creado.getPlaca())
+                .toUri();
         return ResponseEntity.created(location).build();
     }
 
     @PutMapping("/{placaBus}")
     public ResponseEntity<BusDTO> actualizar(@PathVariable String placaBus, @Valid @RequestBody BusDTO dto) {
-        dto.setBu_placa(placaBus);
+        dto.setPlaca(placaBus);
         Bus actualizado = busService.update(placaBus, busMapper.toEntity(dto));
         return ResponseEntity.ok(busMapper.toDTO(actualizado));
     }

@@ -8,6 +8,7 @@ import pe.edu.upeu.sysalmacen.repository.ICrudGenericoRepository;
 import pe.edu.upeu.sysalmacen.service.IBusService;
 
 import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -39,7 +40,7 @@ public class BusServiceImp extends CrudGenericoServiceImp<Bus, String> implement
     @Override
     public Bus actualizar(Bus bus) {
         // Verificar existencia primero
-        if (!repo.existsById(bus.getBu_placa())) {
+        if (!repo.existsById(bus.getPlaca())) {
             throw new RuntimeException("Bus con placa " + bus.getPlaca() + " no encontrado");
         }
         return repo.save(bus);
@@ -55,11 +56,13 @@ public class BusServiceImp extends CrudGenericoServiceImp<Bus, String> implement
 
     @Override
     public List<Bus> buscarPorModelo(String modelo) {
-        return repo.findByModelo(modelo);
+        return List.of();
     }
 
     @Override
     public List<Bus> buscarPorEstado(String estado) {
-        return repo.findByEstado(estado);
+        return List.of();
     }
+
+
 }
