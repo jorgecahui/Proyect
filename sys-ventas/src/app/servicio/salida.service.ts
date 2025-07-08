@@ -9,11 +9,13 @@ import { Observable, Subject, map } from 'rxjs';
 export class SalidaService {
   private url: string = 'http://localhost:6161/api/salidas';
 
+  
   private entidadCambio = new Subject<Salida[]>();
   private mensajeCambio = new Subject<string>();
 
   constructor(private http: HttpClient) {}
 
+  
   getEntidadChange(): Observable<Salida[]> {
     return this.entidadCambio.asObservable();
   }
@@ -30,6 +32,7 @@ export class SalidaService {
     this.mensajeCambio.next(mensaje);
   }
 
+  
   findAll(): Observable<Salida[]> {
     return this.http.get<Salida[]>(this.url);
   }
@@ -38,29 +41,33 @@ export class SalidaService {
     return this.http.get<any>(`${this.url}/${id}`).pipe(
       map(data => ({
         id: data.id,
-        idRepuesto: data.repuesto.id,
+        idRepuesto: data.repuesto?.id || null,
         cantidadEntregada: data.cantidadEntregada,
         destinatario: data.destinatario,
         codigo: data.codigo,
         fechaSalida: new Date(data.fechaSalida),
         estado: data.estado,
-        nombreRepuesto: data.repuesto.nombre || ''
+        nombreRepuesto: data.repuesto?.nombre || ''
       }))
     );
   }
 
-  save(salida: Salida): Observable<Salida> {
+  
+  save(salida: Omit<Salida, 'id'>): Observable<Salida> {
     return this.http.post<Salida>(this.url, salida);
-  }
+  } 
 
+  
   update(id: number, salida: Salida): Observable<void> {
     return this.http.put<void>(`${this.url}/${id}`, salida);
   }
 
+  
   delete(id: number): Observable<void> {
     return this.http.delete<void>(`${this.url}/${id}`);
   }
 }
+
 
 
 

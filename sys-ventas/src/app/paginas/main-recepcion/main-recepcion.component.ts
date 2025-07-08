@@ -1,8 +1,8 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatPaginatorModule } from '@angular/material/paginator';
-import { MatSortModule } from '@angular/material/sort';
-import { MatTableModule } from '@angular/material/table';
+import { MatSort, MatSortModule } from '@angular/material/sort';
+import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
@@ -11,20 +11,21 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatCardModule } from '@angular/material/card';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { RouterModule } from '@angular/router';
-import { DatePipe } from '@angular/common';
-import { MatSort } from '@angular/material/sort';
-import { MatTableDataSource } from '@angular/material/table';
-import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
+import { RouterModule, Router } from '@angular/router';
+import { DatePipe, CommonModule } from '@angular/common';
+
 import { Recepcion } from '../../modelo/Recepcion';
+import { Repuesto } from '../../modelo/Repuesto';
 import { RecepcionService } from '../../servicio/recepcion.service';
 import { RepuestoService } from '../../servicio/repuesto.service';
-import { Repuesto } from '../../modelo/Repuesto';
+import { SalidaService } from '../../servicio/salida.service';
+import { Salida } from '../../modelo/Salida';
 
 @Component({
   selector: 'app-main-recepcion',
   templateUrl: './main-recepcion.component.html',
+  styleUrls: ['./main-recepcion.component.css'],
+  standalone: true,
   imports: [
     CommonModule,
     MatPaginatorModule,
@@ -39,15 +40,21 @@ import { Repuesto } from '../../modelo/Repuesto';
     MatChipsModule,
     MatTooltipModule,
     RouterModule,
-    DatePipe  
-  ],
-  styleUrls: ['./main-recepcion.component.css']
+    DatePipe
+  ]
 })
 export class MainRecepcionComponent implements OnInit {
-
-  displayedColumns: string[] = ['id', 'repuesto', 'cantidadRecibida', 'proveedor', 'codigo', 'fechaRecepcion', 'estado', 'accion'];
+  displayedColumns: string[] = [
+    'id',
+    'repuesto',
+    'cantidadRecibida',
+    'proveedor',
+    'codigo',
+    'fechaRecepcion',
+    'estado',
+    'accion'
+  ];
   dataSource: MatTableDataSource<Recepcion> = new MatTableDataSource<Recepcion>();
-
   repuestos: Repuesto[] = [];
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -56,6 +63,7 @@ export class MainRecepcionComponent implements OnInit {
   constructor(
     private recepcionService: RecepcionService,
     private repuestoService: RepuestoService,
+    private salidaService: SalidaService,
     private router: Router
   ) {}
 
@@ -75,7 +83,7 @@ export class MainRecepcionComponent implements OnInit {
   }
 
   getNombreRepuesto(id: number): string {
-    const rep = this.repuestos.find(r => r.id === id);
+    const rep = this.repuestos.find(r => r.idRepuesto === id);
     return rep ? rep.nombre : 'Desconocido';
   }
 
@@ -95,7 +103,31 @@ export class MainRecepcionComponent implements OnInit {
       this.listarRecepciones();
     });
   }
+
+  enviarASalida(row: Recepcion) {
+    const nuevaSalida: Omit<Salida, 'id'> = {
+      idRepuesto: row.idRepuesto!,
+      cantidadEntregada: row.cantidadRecibida,
+      destinatario: 'SIN DESTINATARIO',
+      codigo: row.codigo,
+      fechaSalida: new Date(),
+      estado: 'ENTREGADO'
+    };
+
+    this.salidaService.save(nuevaSalida).subscribe(() => {
+      this.recepcionService.delete(row.id!).subscribe(() => {
+        this.listarRecepciones();
+
+        this.salidaService.findAll().subscribe(data => {
+          this.salidaService.setEntidadChange(data);
+          this.salidaService.setMessageChange('Movido a salida correctamente');
+        });
+      });
+    });
+  }
 }
+
+
 
 
 

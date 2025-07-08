@@ -20,7 +20,7 @@
       <!-- Repuesto -->
       <ng-container matColumnDef="repuesto">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>Repuesto</th>
-        <td mat-cell *matCellDef="let row">{{ row.nombreRepuesto }}</td>
+        <td mat-cell *matCellDef="let row">{{ nombreRepuesto(row.idRepuesto) }}</td>
       </ng-container>
 
       <!-- Cantidad -->
@@ -66,7 +66,7 @@
         <td mat-cell *matCellDef="let row" class="accion-cell">
           <div class="acciones-grupo">
             <div class="acciones-izquierda">
-              <button mat-icon-button color="primary" [routerLink]="['edit', row.id]" matTooltip="Editar salida">
+              <button mat-icon-button color="primary" (click)="abrirDialogoEditar(row.id)" matTooltip="Editar salida">
                 <mat-icon>edit</mat-icon>
               </button>
 
@@ -76,7 +76,7 @@
             </div>
 
             <button
-              *ngIf="row.estado === 'Entregado'"
+              *ngIf="row.estado.toLowerCase() === 'entregado'"
               mat-icon-button
               color="accent"
               class="pdf-boton"
@@ -98,11 +98,14 @@
   </div>
 
   <!-- Botón flotante agregar -->
-  <button mat-fab color="primary" [routerLink]="['new']" matTooltip="Agregar nueva salida"
-    style="position: fixed; bottom: 2rem; right: 2rem;">
+  <button
+    mat-fab
+    color="primary"
+    (click)="abrirDialogoEditar()"
+    matTooltip="Agregar nueva salida"
+    style="position: fixed; bottom: 2rem; right: 2rem;"
+  >
     <mat-icon>add</mat-icon>
   </button>
-
-  <router-outlet></router-outlet>
 </div>
 

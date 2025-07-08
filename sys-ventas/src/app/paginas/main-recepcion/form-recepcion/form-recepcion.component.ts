@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import {
   FormControl,
   FormGroup,
@@ -9,7 +9,7 @@ import {
 import { ActivatedRoute, Router } from '@angular/router';
 import { Recepcion } from '../../../modelo/Recepcion';
 import { RecepcionService } from '../../../servicio/recepcion.service';
-import { RepuestoService } from '../../../servicio/repuesto.service';  // 👉 te faltaba importar
+import { RepuestoService } from '../../../servicio/repuesto.service';
 import { switchMap } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { MaterialModule } from '../../../material/material.module';
@@ -38,9 +38,12 @@ export class FormRecepcionComponent implements OnInit {
 
   repuestos: Repuesto[] = [];
 
+  
+  @Output() formularioCerrado = new EventEmitter<void>();
+
   constructor(
     private recepcionService: RecepcionService,
-    private repuestoService: RepuestoService, // 
+    private repuestoService: RepuestoService,
     private router: Router,
     private route: ActivatedRoute
   ) {}
@@ -48,7 +51,7 @@ export class FormRecepcionComponent implements OnInit {
   ngOnInit(): void {
     this.form = new FormGroup({
       id: new FormControl(null),
-      repuesto: new FormControl(null, [Validators.required]), 
+      repuesto: new FormControl(null, [Validators.required]),
       cantidadRecibida: new FormControl(0, [Validators.required]),
       proveedor: new FormControl('', [Validators.required]),
       codigo: new FormControl('', [Validators.required]),
@@ -73,7 +76,7 @@ export class FormRecepcionComponent implements OnInit {
     this.recepcionService.findById(this.id).subscribe((data: Recepcion) => {
       this.form.setValue({
         id: data.id,
-        repuesto: data.idRepuesto, 
+        repuesto: data.idRepuesto,
         cantidadRecibida: data.cantidadRecibida,
         proveedor: data.proveedor,
         codigo: data.codigo,
@@ -84,7 +87,6 @@ export class FormRecepcionComponent implements OnInit {
   }
 
   operate() {
-     
     const recepcion: Recepcion = {
       ...this.form.value,
       repuesto: { id: this.form.value.repuesto }
@@ -96,6 +98,7 @@ export class FormRecepcionComponent implements OnInit {
       ).subscribe((data: Recepcion[]) => {
         this.recepcionService.setRecepcionChange(data);
         this.recepcionService.setMessageChange('Actualizado correctamente');
+        this.formularioCerrado.emit(); 
         this.router.navigate(['/pages/recepcion']);
       });
     } else {
@@ -104,7 +107,7 @@ export class FormRecepcionComponent implements OnInit {
       ).subscribe((data: Recepcion[]) => {
         this.recepcionService.setRecepcionChange(data);
         this.recepcionService.setMessageChange('Creado correctamente');
-        this.router.navigate(['/pages/recepcion']);
+        this.formularioCerrado.emit(); 
       });
     }
   }
@@ -113,4 +116,5 @@ export class FormRecepcionComponent implements OnInit {
     return this.form.controls;
   }
 }
+
 

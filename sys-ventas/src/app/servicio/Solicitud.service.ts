@@ -3,7 +3,7 @@ import { GenericService } from './generic.service';
 import { Solicitud } from '../modelo/Solicitud';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
-import { BehaviorSubject, Subject } from 'rxjs';
+import {BehaviorSubject, map, Observable, Subject} from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -14,13 +14,24 @@ export class SolicitudService extends GenericService<Solicitud> {
   private messageChange: Subject<string> = new Subject<string>();
 
   constructor(protected override http: HttpClient) {
-    super(http, `${environment.HOST}/solicitudes`);
+    super(http, `${environment.HOST}/api/solicitudcompra`);
   }
 
-  setEntidadChange(data: Solicitud[]) {
-    this.entidadSubject.next(data);
+  listar(): Observable<Solicitud[]> {
+    return this.http.get<any[]>(this.url).pipe(
+      map(data => data.map(item => ({
+        id_solicitud_compra: item.idSolicitudCompra,           // Mapea "id" del backend a "id_solicitud_compra"
+        sc_cantidad: item.cantidad,             // Mapea "cantidad" a "sc_cantidad"
+        sc_estado: item.estado,                 // Mapea "estado" a "sc_estado"
+        id_proveedor: item.idProveedor,         // Mapea "proveedorId" a "id_proveedor"
+        id_repuesto: item.idRepuesto            // Mapea "repuestoId" a "id_repuesto"
+      })))
+    );
   }
 
+  override delete(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.url}/${id}`);
+  }
   getEntidadChange() {
     return this.entidadSubject.asObservable();
   }
@@ -32,4 +43,5 @@ export class SolicitudService extends GenericService<Solicitud> {
   getMessageChange() {
     return this.messageChange.asObservable();
   }
+
 }

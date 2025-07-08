@@ -1,6 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
-import { RouterLink, RouterOutlet } from '@angular/router';
 
 import { SalidaService } from '../../servicio/salida.service';
 import { RepuestoService } from '../../servicio/repuesto.service';
@@ -15,7 +14,12 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+
 import { MaterialModule } from '../../material/material.module';
+
+// ✅ IMPORT CORRECTO del componente usado en MatDialog
+import { FormSalidaComponent } from './form-salida/form-salida.component';
 
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
@@ -27,8 +31,6 @@ import autoTable from 'jspdf-autotable';
   styleUrls: ['./main-salida.component.css'],
   imports: [
     CommonModule,
-    RouterLink,
-    RouterOutlet,
     DatePipe,
     MatPaginatorModule,
     MatSortModule,
@@ -37,7 +39,9 @@ import autoTable from 'jspdf-autotable';
     MatInputModule,
     MatIconModule,
     MatButtonModule,
-    MaterialModule
+    MatDialogModule,
+    MaterialModule,
+    FormSalidaComponent 
   ]
 })
 export class MainSalidaComponent implements OnInit {
@@ -60,7 +64,8 @@ export class MainSalidaComponent implements OnInit {
 
   constructor(
     private salidaService: SalidaService,
-    private repuestoService: RepuestoService
+    private repuestoService: RepuestoService,
+    private dialog: MatDialog
   ) {}
 
   ngOnInit(): void {
@@ -106,16 +111,33 @@ export class MainSalidaComponent implements OnInit {
     });
   }
 
+  abrirDialogoEditar(id?: number) {
+    const dialogRef = this.dialog.open(FormSalidaComponent, {
+      width: '600px',
+      maxHeight: '90vh',
+      data: id ? { id } : null,
+      disableClose: true,
+      autoFocus: false,
+      panelClass: 'dialog-scrollable'
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result === 'guardado') {
+        this.cargarDatos();
+      }
+    });
+  }
+
   generarPDF(salida: Salida) {
     const doc = new jsPDF();
 
     doc.setFontSize(16);
     doc.text('Detalle de Salida de Repuesto', 14, 20);
 
-    const data = [
-      ['ID', salida.id],
-      ['Código', salida.codigo],
-      ['Repuesto', this.nombreRepuesto(salida.idRepuesto)],
+    const data: (string | number)[][] = [
+      ['ID', salida.id ?? ''],
+      ['Código', salida.codigo ?? ''],
+      ['Repuesto', salida.idRepuesto != null ? this.nombreRepuesto(salida.idRepuesto) : 'Desconocido'],
       ['Cantidad Entregada', salida.cantidadEntregada],
       ['Destinatario', salida.destinatario],
       ['Fecha de Salida', new Date(salida.fechaSalida).toLocaleDateString()],
@@ -125,12 +147,13 @@ export class MainSalidaComponent implements OnInit {
     autoTable(doc, {
       startY: 30,
       head: [['Campo', 'Valor']],
-      body: data
+      body: data.map(row => row.map(cell => cell ?? '')) // prevenir undefined
     });
 
     doc.save(`salida-${salida.id}.pdf`);
   }
 }
+
 
 
 
