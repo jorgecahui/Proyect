@@ -1,5 +1,6 @@
 package pe.edu.upeu.sysalmacen.mappers;
 
+import org.mapstruct.IterableMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
@@ -8,8 +9,11 @@ import pe.edu.upeu.sysalmacen.model.Proveedor;
 import pe.edu.upeu.sysalmacen.model.Repuesto;
 import pe.edu.upeu.sysalmacen.model.SolicitudCompra;
 
+import java.util.List;
+
 @Mapper(componentModel = "spring")
 public interface SolicitudCompraMapper extends GenericMapper<SolicitudCompraDTO, SolicitudCompra> {
+
     @Mappings({
             @Mapping(source = "proveedor.idProveedor", target = "idProveedor"),
             @Mapping(source = "repuesto.idRepuesto", target = "idRepuesto")
@@ -24,6 +28,10 @@ public interface SolicitudCompraMapper extends GenericMapper<SolicitudCompraDTO,
     @Override
     SolicitudCompra toEntity(SolicitudCompraDTO dto);
 
+    @IterableMapping(elementTargetType = SolicitudCompraDTO.class)
+    List<SolicitudCompraDTO> toDtoList(List<SolicitudCompra> entities);
+
+    // Métodos de ayuda personalizados
     default Long map(Proveedor p) {
         return p != null ? p.getIdProveedor() : null;
     }
@@ -45,5 +53,4 @@ public interface SolicitudCompraMapper extends GenericMapper<SolicitudCompraDTO,
         r.setIdRepuesto(id);
         return r;
     }
-
 }

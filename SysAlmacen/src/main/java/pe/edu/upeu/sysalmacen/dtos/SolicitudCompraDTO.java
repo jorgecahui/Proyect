@@ -7,6 +7,6 @@ public class SolicitudCompraDTO {
     private Integer idSolicitudCompra;
     private String cantidad;
     private String estado;
-    private Integer idProveedor;
-    private Integer idRepuesto;
+    private Long idProveedor;
+    private Long idRepuesto;
 }

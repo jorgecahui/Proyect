@@ -10,46 +10,52 @@ import pe.edu.upeu.sysalmacen.mappers.SolicitudCompraMapper;
 import pe.edu.upeu.sysalmacen.model.SolicitudCompra;
 import pe.edu.upeu.sysalmacen.service.ISolicitudCompraService;
 
-
 import java.net.URI;
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/solicitudcompra")
 @RequiredArgsConstructor
-@CrossOrigin("*")
-
-
 public class SolicitudCompraController {
 
-    private final ISolicitudCompraService solicitudCompraService ;
+    private final ISolicitudCompraService solicitudCompraService;
     private final SolicitudCompraMapper solicitudCompraMapper;
 
+    // GET: Listar todas las solicitudes
     @GetMapping
-    public ResponseEntity<List<SolicitudCompraDTO>> listarTodos() {
-        return ResponseEntity.ok(solicitudCompraMapper.toDTOs(solicitudCompraService.findAll()));
+    public ResponseEntity<List<SolicitudCompraDTO>> listar() {
+        List<SolicitudCompra> lista = solicitudCompraService.findAll();
+        List<SolicitudCompraDTO> listaDto = solicitudCompraMapper.toDtoList(lista);
+        return ResponseEntity.ok(listaDto);
     }
 
+    // GET: Buscar por ID
     @GetMapping("/{id}")
-    public ResponseEntity<SolicitudCompraDTO> obtenerPorId(@PathVariable Integer id) {
-        return ResponseEntity.ok(solicitudCompraMapper.toDTO(solicitudCompraService.findById(id)));
+    public ResponseEntity<SolicitudCompraDTO> buscarPorId(@PathVariable Integer id) {
+        SolicitudCompra entity = solicitudCompraService.findById(id);
+        return ResponseEntity.ok(solicitudCompraMapper.toDTO(entity));
     }
 
+    // POST: Registrar
     @PostMapping
-    public ResponseEntity<Void> crear(@Valid @RequestBody SolicitudCompraDTO dto) {
-        SolicitudCompra creado = solicitudCompraService.save(solicitudCompraMapper.toEntity(dto));
-        URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
-                .buildAndExpand(creado.getIdSolicitudCompra()).toUri();
+    public ResponseEntity<Void> registrar(@Valid @RequestBody SolicitudCompraDTO dto) {
+        SolicitudCompra entity = solicitudCompraMapper.toEntity(dto);
+        SolicitudCompra creado = solicitudCompraService.registrar(entity);
+        URI location = ServletUriComponentsBuilder.fromCurrentRequest()
+                .path("/{id}").buildAndExpand(creado.getIdSolicitudCompra()).toUri();
         return ResponseEntity.created(location).build();
     }
 
+    // PUT: Actualizar
     @PutMapping("/{id}")
-    public ResponseEntity<SolicitudCompraDTO> actualizar(@PathVariable Integer id, @Valid @RequestBody SolicitudCompraDTO dto) {
+    public ResponseEntity<SolicitudCompraDTO> actualizar(@PathVariable Integer id,
+                                                         @Valid @RequestBody SolicitudCompraDTO dto) {
         dto.setIdSolicitudCompra(id);
         SolicitudCompra actualizado = solicitudCompraService.update(id, solicitudCompraMapper.toEntity(dto));
         return ResponseEntity.ok(solicitudCompraMapper.toDTO(actualizado));
     }
 
+    // DELETE: Eliminar
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> eliminar(@PathVariable Integer id) {
         solicitudCompraService.delete(id);
