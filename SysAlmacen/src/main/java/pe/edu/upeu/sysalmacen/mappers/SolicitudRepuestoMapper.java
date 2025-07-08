@@ -12,38 +12,38 @@ import pe.edu.upeu.sysalmacen.model.Usuario;
 @Mapper(componentModel = "spring")
 public interface SolicitudRepuestoMapper extends GenericMapper<SolicitudRepuestoDTO, SolicitudRepuesto> {
 
+    @Override
+    @Mapping(source = "idUsuario", target = "usuario")
+    @Mapping(source = "nombreRepuesto", target = "repuesto")
+    @Mapping(source = "placaBus", target = "bus")
+    SolicitudRepuesto toEntity(SolicitudRepuestoDTO dto);
 
-    // Métodos auxiliares para entidades
-    default Long map(Usuario u) {
-        return u != null ? u.getIdUsuario() : null;
-    }
+    @Override
+    @Mapping(source = "usuario", target = "idUsuario")
+    @Mapping(source = "repuesto", target = "nombreRepuesto")
+    @Mapping(source = "bus", target = "placaBus")
+    SolicitudRepuestoDTO toDTO(SolicitudRepuesto entity);
 
-    default Long map(Repuesto r) {
-        return r != null ? r.getIdRepuesto() : null;
-    }
+    default Long map(Usuario u) { return u != null ? u.getIdUsuario() : null; }
 
-    default Long map(Bus b) {
-        return b != null ? b.getIdBus() : null;
-    }
+    default Long map(Repuesto r) { return r != null ? r.getIdRepuesto() : null; }
+
+    default Long map(Bus b) { return b != null ? b.getIdBus() : null; }
 
     default Usuario mapUsuario(Long id) {
         if (id == null) return null;
-        Usuario u = new Usuario();
-        u.setIdUsuario(id);
-        return u;
+        Usuario u = new Usuario(); u.setIdUsuario(id); return u;
     }
 
     default Repuesto mapRepuesto(Long id) {
         if (id == null) return null;
-        Repuesto r = new Repuesto();
-        r.setIdRepuesto(id);
-        return r;
+        Repuesto r = new Repuesto(); r.setIdRepuesto(id); return r;
     }
 
     default Bus mapBus(Long id) {
         if (id == null) return null;
-        Bus b = new Bus();
-        b.setIdBus(id);
-        return b;
+        Bus b = new Bus(); b.setIdBus(id); return b;
     }
 }
+
+

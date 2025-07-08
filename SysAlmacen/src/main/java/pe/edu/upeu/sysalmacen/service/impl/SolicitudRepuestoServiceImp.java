@@ -7,9 +7,15 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import pe.edu.upeu.sysalmacen.dtos.SolicitudRepuestoDTO;
 import pe.edu.upeu.sysalmacen.mappers.SolicitudRepuestoMapper;
+import pe.edu.upeu.sysalmacen.model.Recepcion;
+import pe.edu.upeu.sysalmacen.model.Repuesto;
 import pe.edu.upeu.sysalmacen.model.SolicitudRepuesto;
+import pe.edu.upeu.sysalmacen.model.Usuario;
 import pe.edu.upeu.sysalmacen.repository.*;
 import pe.edu.upeu.sysalmacen.service.ISolicitudRepuestoService;
+import pe.edu.upeu.sysalmacen.model.Bus;
+
+import java.time.LocalDate;
 
 @Service
 @RequiredArgsConstructor
@@ -19,25 +25,50 @@ public class SolicitudRepuestoServiceImp extends CrudGenericoServiceImp<Solicitu
     private final IUsuarioRepository usuarioRepo;
     private final IBusRepository busRepo;
     private final IRepuestoRepository repuestoRepo;
+    private final RecepcionRepository recepcionRepo; // <- asegurado
     private final SolicitudRepuestoMapper repuestoMapper;
 
     public Page<SolicitudRepuesto> listarPageable(Pageable pageable) {
         return repo.findAll(pageable);
     }
 
-    public SolicitudRepuesto save(SolicitudRepuestoDTO dto) {
-        SolicitudRepuesto solicitud = new SolicitudRepuesto();
 
-        solicitud.setUsuario(usuarioRepo.findById(dto.getIdUsuario())
-                .orElseThrow(() -> new EntityNotFoundException("Usuario no encontrado")));
+    public SolicitudRepuesto saveSolicitudConRecepcion(SolicitudRepuestoDTO dto) {
+        Usuario usuario = usuarioRepo.findById(dto.getIdUsuario())
+                .orElseThrow(() -> new EntityNotFoundException("Usuario no encontrado"));
 
-        solicitud.setRepuesto(repuestoRepo.findById(dto.getNombreRepuesto())
-                .orElseThrow(() -> new EntityNotFoundException("Repuesto no encontrado")));
+        Repuesto repuesto = repuestoRepo.findById(dto.getNombreRepuesto())
+                .orElseThrow(() -> new EntityNotFoundException("Repuesto no encontrado"));
 
-        solicitud.setBus(busRepo.findById(dto.getPlacaBus())
-                .orElseThrow(() -> new EntityNotFoundException("Bus no encontrado")));
+        Bus bus = busRepo.findById(dto.getPlacaBus())
+                .orElseThrow(() -> new EntityNotFoundException("Bus no encontrado"));
 
-        return repo.save(solicitud);
+        // Crear solicitud
+        SolicitudRepuesto solicitud = SolicitudRepuesto.builder()
+                .usuario(usuario)
+                .repuesto(repuesto)
+                .bus(bus)
+                .cantidad(dto.getCantidad())
+                .estado(dto.getEstado())
+                .fecha(dto.getFecha())
+                .motivo(dto.getMotivo())
+                .build();
+
+        solicitud = repo.save(solicitud);
+
+        // Crear recepción vinculada
+        Recepcion recepcion = Recepcion.builder()
+                .repuesto(repuesto)
+                .cantidadRecibida(dto.getCantidad())
+                .codigo("AUTO-" + System.currentTimeMillis()) // Código autogenerado
+                .estado("PENDIENTE")
+                .proveedor(dto.getProveedor() != null ? dto.getProveedor() : "POR DEFINIR")
+                .fechaRecepcion(LocalDate.now())
+                .build();
+
+        recepcionRepo.save(recepcion);
+
+        return solicitud;
     }
 
     @Override
@@ -45,3 +76,4 @@ public class SolicitudRepuestoServiceImp extends CrudGenericoServiceImp<Solicitu
         return repo;
     }
 }
+

@@ -44,14 +44,14 @@ public class SolicitudRepuestoController {
 
     @PostMapping("/guardar")
     public ResponseEntity<Void> save(@Valid @RequestBody SolicitudRepuestoDTO dto) {
-        System.out.println("holla_us_dto_12");
-        SolicitudRepuesto obj = solicitudRepuestoService.save(solicitudRepuestoMapper.toEntity(dto));
+        SolicitudRepuesto obj = solicitudRepuestoService.saveSolicitudConRecepcion(dto);
         URI location = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("/{id}")
                 .buildAndExpand(obj.getId_SolicitudRepuesto())
                 .toUri();
         return ResponseEntity.created(location).build();
     }
+
     @PutMapping("/{id}")
     public ResponseEntity<SolicitudRepuestoDTO> update(@Valid @PathVariable("id") Long id,
                                                   @RequestBody SolicitudRepuestoDTO dto) {
