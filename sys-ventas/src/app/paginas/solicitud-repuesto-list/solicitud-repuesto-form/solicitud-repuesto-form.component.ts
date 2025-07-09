@@ -42,13 +42,16 @@ export class SolicitudRepuestoFormComponent implements OnInit {
     this.isEditMode = this.data?.isEdit || false;
 
     this.solicitudForm = this.fb.group({
+      id_SolicitudRepuesto: [this.isEditMode ? this.data.solicitud?.id_SolicitudRepuesto : null],
       fecha: ['', Validators.required],
       cantidad: ['', [Validators.required, Validators.min(1)]],
       motivo: ['', [Validators.required, Validators.maxLength(200)]],
       estado: [this.isEditMode ? this.data.solicitud?.estado : 'Pendiente'],
-      usuarioId: ['', Validators.required],
-      repuestoId: ['', Validators.required],
-      busId: ['', Validators.required],
+      idUsuario: ['', Validators.required],
+      idRepuesto: ['', Validators.required],
+      idBus: ['', Validators.required],
+      nombre: [{ value: '', disabled: true }], // opcional, solo para visualización
+      placa: [{ value: '', disabled: true }]
     });
 
     if (this.isEditMode && this.data?.solicitud) {

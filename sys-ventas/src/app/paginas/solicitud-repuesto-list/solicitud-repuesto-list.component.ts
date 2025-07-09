@@ -70,8 +70,8 @@ export class SolicitudRepuestoListComponent implements OnInit {
     this.dataSource.sort = this.sort;
     this.dataSource.sortingDataAccessor = (item, property) => {
       switch (property) {
-        case 'bus.placa': return item.bus?.placa || '';
-        case 'repuesto.nombre': return item.repuesto?.nombre || '';
+        case 'Busplaca': return item.placa || '';
+        case 'nombreRepuesto': return item.nombre || '';
         default: return item[property as keyof SolicitudRepuesto] as string;
       }
     };

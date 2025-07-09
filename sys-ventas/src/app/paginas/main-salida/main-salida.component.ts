@@ -24,6 +24,7 @@ import { FormSalidaComponent } from './form-salida/form-salida.component';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 
+
 @Component({
   selector: 'app-main-salida',
   standalone: true,
@@ -41,7 +42,7 @@ import autoTable from 'jspdf-autotable';
     MatButtonModule,
     MatDialogModule,
     MaterialModule,
-    FormSalidaComponent 
+
   ]
 })
 export class MainSalidaComponent implements OnInit {
@@ -95,8 +96,8 @@ export class MainSalidaComponent implements OnInit {
     });
   }
 
-  nombreRepuesto(idRepuesto: number): string {
-    const repuesto = this.repuestos.find(r => r.id === idRepuesto);
+  nombreRepuesto(nombreRepuesto: string): string {
+    const repuesto = this.repuestos.find(r => r.nombre === nombreRepuesto);
     return repuesto ? repuesto.nombre : 'Desconocido';
   }
 
@@ -137,7 +138,7 @@ export class MainSalidaComponent implements OnInit {
     const data: (string | number)[][] = [
       ['ID', salida.id ?? ''],
       ['Código', salida.codigo ?? ''],
-      ['Repuesto', salida.idRepuesto != null ? this.nombreRepuesto(salida.idRepuesto) : 'Desconocido'],
+      ['Repuesto', salida.nombreRepuesto != null ? this.nombreRepuesto(salida.nombreRepuesto) : 'Desconocido'],
       ['Cantidad Entregada', salida.cantidadEntregada],
       ['Destinatario', salida.destinatario],
       ['Fecha de Salida', new Date(salida.fechaSalida).toLocaleDateString()],

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
-import { SolicitudRepuesto, SolicitudRepuestoDTO } from '../modelo/SolicitudRepuesto';
+import { SolicitudRepuesto } from '../modelo/SolicitudRepuesto';
 import { BehaviorSubject, Observable, Subject, tap } from 'rxjs';
 
 @Injectable({
@@ -36,7 +36,7 @@ export class SolicitudRepuestoService {
   }
 
   // === POST: Crear nueva solicitud
-  createSolicitud(dto: SolicitudRepuestoDTO): Observable<SolicitudRepuesto> {
+  createSolicitud(dto: SolicitudRepuesto): Observable<SolicitudRepuesto> {
     console.log(dto);
     return this.http.post<SolicitudRepuesto>(this.url, dto).pipe(
       tap(() => this.findAllOT())
@@ -44,7 +44,7 @@ export class SolicitudRepuestoService {
   }
 
   // === PUT: Actualizar solicitud
-  updateSolicitud(id: number, dto: SolicitudRepuestoDTO): Observable<SolicitudRepuesto> {
+  updateSolicitud(id: number, dto: SolicitudRepuesto): Observable<SolicitudRepuesto> {
     return this.http.put<SolicitudRepuesto>(`${this.url}/${id}`, dto).pipe(
       tap(() => this.findAllOT())
     );
@@ -66,11 +66,11 @@ export class SolicitudRepuestoService {
   }
 
   listarRepuestos(): Observable<any> {
-    return this.http.get('/api/repuestos');
+    return this.http.get('/api/repuesto');
   }
 
   listarBuses(): Observable<any> {
-    return this.http.get('/api/buses');
+    return this.http.get('/api/bus');
   }
 
   // === Comunicación y selección

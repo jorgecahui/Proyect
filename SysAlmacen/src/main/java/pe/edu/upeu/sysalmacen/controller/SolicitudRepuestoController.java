@@ -15,6 +15,7 @@ import pe.edu.upeu.sysalmacen.service.ISolicitudRepuestoService;
 
 import java.net.URI;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/solicitudRepuesto")
@@ -60,6 +61,15 @@ public class SolicitudRepuestoController {
         SolicitudRepuesto obj = solicitudRepuestoService.update(id, solicitudRepuestoMapper.toEntity(dto));
         return ResponseEntity.ok(solicitudRepuestoMapper.toDTO(obj));
     }
+    @PatchMapping("/{id}/estado")
+    public ResponseEntity<SolicitudRepuestoDTO> cambiarEstado(@PathVariable Long id, @RequestBody Map<String, String> body) {
+        String nuevoEstado = body.get("estado");
+        SolicitudRepuesto solicitud = solicitudRepuestoService.findById(id);
+        solicitud.setEstado(nuevoEstado);
+        SolicitudRepuesto actualizado = solicitudRepuestoService.save(solicitud);
+        return ResponseEntity.ok(solicitudRepuestoMapper.toDTO(actualizado));
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable("id") Long id) {
         solicitudRepuestoService.delete(id);
