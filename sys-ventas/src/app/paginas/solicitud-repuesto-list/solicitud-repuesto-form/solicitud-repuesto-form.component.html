@@ -35,7 +35,7 @@
   </mat-form-field>
 
   <!-- Estado (solo en modo edición) -->
-  <div *ngIf="isEditMode">
+  <ng-container *ngIf="isEditMode">
     <mat-form-field appearance="outline" class="full-width">
       <mat-label>Estado</mat-label>
       <mat-select formControlName="estado">
@@ -47,7 +47,7 @@
         Estado es requerido
       </mat-error>
     </mat-form-field>
-  </div>
+  </ng-container>
 
   <!-- Usuario -->
   <mat-form-field appearance="outline" class="full-width">
@@ -65,17 +65,15 @@
   <!-- Repuesto -->
   <mat-form-field appearance="outline" class="full-width">
     <mat-label>Repuesto</mat-label>
-    <mat-select formControlName="nombre">
-      <mat-option *ngFor="let repuesto of repuestos" [value]="repuesto.nombre">
+    <mat-select formControlName="idRepuesto">
+      <mat-option *ngFor="let repuesto of repuestos" [value]="repuesto.idRepuesto">
         {{ repuesto.nombre }}
       </mat-option>
     </mat-select>
-    <mat-error *ngIf="solicitudForm.get('nombre')?.hasError('required')">
+    <mat-error *ngIf="solicitudForm.get('idRepuesto')?.hasError('required')">
       Repuesto es requerido
     </mat-error>
   </mat-form-field>
-
-
 
   <!-- Bus -->
   <mat-form-field appearance="outline" class="full-width">
@@ -85,11 +83,23 @@
         {{ bus.placa }} - {{ bus.modelo }}
       </mat-option>
     </mat-select>
-    <mat-error *ngIf="solicitudForm.get('busId')?.hasError('required')">
+    <mat-error *ngIf="solicitudForm.get('idBus')?.hasError('required')">
       Bus es requerido
     </mat-error>
   </mat-form-field>
 
+  <!-- Campos deshabilitados para visualización -->
+  <mat-form-field appearance="outline" class="full-width" *ngIf="solicitudForm.get('nombre')?.value">
+    <mat-label>Nombre del repuesto</mat-label>
+    <input matInput formControlName="nombre" disabled>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" class="full-width" *ngIf="solicitudForm.get('placa')?.value">
+    <mat-label>Placa del bus</mat-label>
+    <input matInput formControlName="placa" disabled>
+  </mat-form-field>
+
+  <!-- Botones -->
   <div class="button-row" style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px;">
     <button mat-stroked-button color="warn" type="button" (click)="onCancel()">
       Cancelar

@@ -34,7 +34,7 @@
     <mat-menu #menu="matMenu">
       <button mat-menu-item >
         <mat-icon>account_box</mat-icon>
-        <span>My account</span>
+        <span>My Cuenta</span>
       </button>
       <button mat-menu-item (click)="sidenav.opened = false" (click)="logout()" >
         <mat-icon>exit_to_app</mat-icon>
@@ -77,11 +77,13 @@
         <mat-icon>commute</mat-icon>
         <span>Marca</span>
       </button>
+      -->
       <button class="myButton" mat-menu-item (click)="sidenav.toggle()"
               routerLink="/pages/product" [routerLinkActive]="['active']" style="cursor: pointer">
         <mat-icon>commute</mat-icon>
-        <span>Producto</span>
+        <span>REPUESTO</span>
       </button>
+      <!--
       <button class="myButton" mat-menu-item (click)="sidenav.toggle()"
               routerLink="/pages/registro" [routerLinkActive]="['active']" style="cursor: pointer">
         <mat-icon>commute</mat-icon>

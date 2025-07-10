@@ -34,4 +34,19 @@ public class Repuesto {
 
     @Column(nullable = false, name = "re_stock_minimo")
     private int  stockMinimo;
+    @ManyToOne
+    @JoinColumn(name = "id_categoria", referencedColumnName =
+            "id_categoria",nullable = false, foreignKey = @ForeignKey(name =
+            "FK_CATEGORIA_PRODUCTO") )
+    private Categoria categoria;
+    @ManyToOne
+    @JoinColumn(name = "id_marca", referencedColumnName = "id_marca",
+            nullable = false, foreignKey = @ForeignKey(name =
+            "FK_MARCA_PRODUCTO"))
+    private Marca marca;
+    @ManyToOne
+    @JoinColumn(name = "id_unidad", referencedColumnName = "id_unidad",
+            nullable = false, foreignKey = @ForeignKey(name =
+            "FK_UNIDADMEDIDA_PRODUCTO"))
+    private UnidadMedida unidadMedida;
 }

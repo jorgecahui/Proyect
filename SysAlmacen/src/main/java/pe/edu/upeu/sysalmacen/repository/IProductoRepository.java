@@ -9,4 +9,5 @@ import java.util.List;
 public interface IProductoRepository extends ICrudGenericoRepository<Producto, Long>{
     @Query(value = "CALL productosMasVendidos()", nativeQuery = true)
     List<ProdMasVendidosDTO> findProductosMasVendidos();
+
 }

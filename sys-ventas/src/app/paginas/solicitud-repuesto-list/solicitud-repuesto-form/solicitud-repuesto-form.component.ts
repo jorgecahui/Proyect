@@ -9,6 +9,7 @@ import {NgForOf} from '@angular/common';
 
 @Component({
   selector: 'app-solicitud-repuesto-form',
+  standalone: true,
   templateUrl: './solicitud-repuesto-form.component.html',
   imports: [
     ReactiveFormsModule,
@@ -69,7 +70,6 @@ export class SolicitudRepuestoFormComponent implements OnInit {
 
   onSubmit(): void {
     if (this.solicitudForm.invalid) return;
-
     const formValue = this.solicitudForm.value;
 
     if (this.isEditMode) {
