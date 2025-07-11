@@ -35,13 +35,7 @@ public class ProductoController {
         return ResponseEntity.ok(productoMapper.toDTO(obj));
     }
 
-    @PostMapping
-    public ResponseEntity<Void> save(@Valid @RequestBody ProductoDTO.ProductoCADto dto) {
-        ProductoDTO obj = productoService.saveD(dto);
-        URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
-                .buildAndExpand(obj.getIdProducto()).toUri();
-        return ResponseEntity.created(location).build();
-    }
+
 
     @PutMapping("/{id}")
     public ResponseEntity<ProductoDTO> update(@Valid @RequestBody ProductoDTO.ProductoCADto dto, @PathVariable("id") Long id) {

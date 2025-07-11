@@ -21,8 +21,11 @@ public class RepuestoDTO {
     @NotNull(message = "La categoría no puede ser nula")
     private CategoriaDTO categoria;
     @NotNull(message = "La marca no puede ser nula")
-    private MarcaDTO marca;@NotNull(message = "La unidad de medida no puede ser nula")
+    private MarcaDTO marca;
+    @NotNull(message = "La unidad de medida no puede ser nula")
     private UnidadMedidaDTO unidadMedida;
+
+
 
     public record RepuestoCADto(
     Long idRepuesto,

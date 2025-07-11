@@ -6,9 +6,10 @@
 
 
   <mat-form-field appearance="fill" style="width: 100%; margin-bottom: 1rem;">
+    <input type="hidden" formControlName="id">
     <mat-label>Repuesto</mat-label>
     <mat-select formControlName="idRepuesto" required>
-      <mat-option *ngFor="let r of repuestos" [value]="r.nombre">{{ r.nombre }}</mat-option>
+      <mat-option *ngFor="let r of repuestos" [value]="r.idRepuesto">{{ r.nombre }}</mat-option>
     </mat-select>
     <mat-error *ngIf="form.get('idRepuesto')?.hasError('required')">
       Selecciona un repuesto

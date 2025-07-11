@@ -114,7 +114,7 @@ export class MainRecepcionComponent implements OnInit {
       estado: 'ENTREGADO'
     };
 
-    this.salidaService.save(nuevaSalida).subscribe(() => {
+    this.salidaService.guardar(nuevaSalida).subscribe(() => {
       this.recepcionService.delete(row.id!).subscribe(() => {
         this.listarRecepciones();
 

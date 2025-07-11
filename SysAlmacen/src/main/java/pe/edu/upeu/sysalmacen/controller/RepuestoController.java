@@ -2,6 +2,8 @@ package pe.edu.upeu.sysalmacen.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -54,6 +56,11 @@ public class RepuestoController {
     public ResponseEntity<Void> delete(@PathVariable("id") Long id) {
         repuestoService.delete(id);
         return ResponseEntity.noContent().build();
+    }
+    @GetMapping("/pageable")
+    public ResponseEntity<org.springframework.data.domain.Page<RepuestoDTO>> listPage(Pageable pageable){
+        Page<RepuestoDTO> page = repuestoService.listaPage(pageable).map(e -> repuestoMapper.toDTO(e));
+        return ResponseEntity.ok(page);
     }
 
 }

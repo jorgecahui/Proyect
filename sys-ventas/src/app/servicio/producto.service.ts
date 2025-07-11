@@ -12,7 +12,6 @@ import {Marca} from '../modelo/Marca';
 
 export class ProductoService extends GenericService<Producto>{
   private productosSubject: Subject<ProductoReport[]> = new Subject<ProductoReport[]>;
-
   private productoSeleccionadoSubject = new BehaviorSubject<ProductoReport | null>(null);
   productoSeleccionado$ = this.productoSeleccionadoSubject.asObservable();
 

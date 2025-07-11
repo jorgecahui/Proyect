@@ -7,7 +7,7 @@
   <mat-form-field appearance="fill">
     <mat-label>Repuesto</mat-label>
     <mat-select formControlName="repuesto">
-      <mat-option *ngFor="let r of repuestos" [value]="r.id">
+      <mat-option *ngFor="let r of repuestos" [value]="r.nombre">
         {{ r.nombre }}
       </mat-option>
     </mat-select>
