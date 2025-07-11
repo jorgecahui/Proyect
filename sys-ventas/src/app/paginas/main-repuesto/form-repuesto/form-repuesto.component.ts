@@ -64,7 +64,7 @@ export class FormRepuestoComponent implements OnInit{
   }
   ngOnInit(): void {
     this.repuestForm = new FormGroup({
-      idRepuesto: new FormControl(null),
+      idRepuesto: new FormControl(""),
       nombre: new FormControl("", [Validators.required, Validators.minLength(3), Validators.maxLength(70)]),
       stockActual: new FormControl(0, [Validators.required]),
       codigo: new FormControl(0, [Validators.required]),

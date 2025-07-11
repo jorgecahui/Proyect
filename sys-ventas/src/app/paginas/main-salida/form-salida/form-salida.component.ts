@@ -115,12 +115,15 @@ export class FormSalidaComponent implements OnInit {
     const salida = {
       ...this.form.value,
       // Asegura que idRepuesto sea number (no string)
+      id: this.isEdit ? this.form.value.id : null,
       idRepuesto: Number(this.form.value.idRepuesto),
       cantidadEntregada: Number(this.form.value.cantidadEntregada),
       destinatario: this.form.value.destinatario.trim(),
       codigo: this.form.value.codigo || '',
       fechaSalida: formatDate(this.form.value.fechaSalida, 'yyyy-MM-dd', 'en-US'),
-      estado: this.form.value.estado
+      estado: this.form.value.estado,
+
+
 
     };
     console.log('Datos a guardar:', salida);
@@ -162,7 +165,17 @@ export class FormSalidaComponent implements OnInit {
     });
     return errors;
   }
+  actualizarNombreRepuesto(idRepuesto: number) {
+    // Busca el repuesto en el array `repuestos` por su ID
+    const repuestoSeleccionado = this.repuestos.find(r => r.idRepuesto === idRepuesto);
 
+    if (repuestoSeleccionado) {
+      // Actualiza el campo oculto `nombreRepuesto` en el formulario
+      this.form.patchValue({
+        nombreRepuesto: repuestoSeleccionado.nombre
+      });
+    }
+  }
 }
 
 

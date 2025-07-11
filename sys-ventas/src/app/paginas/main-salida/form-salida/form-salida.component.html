@@ -7,9 +7,15 @@
 
   <mat-form-field appearance="fill" style="width: 100%; margin-bottom: 1rem;">
     <input type="hidden" formControlName="id">
+    <input type="hidden" formControlName="nombreRepuesto"> <!-- Campo oculto para el nombre -->
     <mat-label>Repuesto</mat-label>
-    <mat-select formControlName="idRepuesto" required>
-      <mat-option *ngFor="let r of repuestos" [value]="r.idRepuesto">{{ r.nombre }}</mat-option>
+    <mat-select
+      formControlName="idRepuesto"
+      required
+      (selectionChange)="actualizarNombreRepuesto($event.value)" >
+    <mat-option *ngFor="let r of repuestos" [value]="r.idRepuesto">
+      {{ r.nombre }} <!-- Mostrar el nombre en lugar del ID (mejor UX) -->
+    </mat-option>
     </mat-select>
     <mat-error *ngIf="form.get('idRepuesto')?.hasError('required')">
       Selecciona un repuesto
