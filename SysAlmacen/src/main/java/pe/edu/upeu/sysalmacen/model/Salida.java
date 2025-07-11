@@ -5,6 +5,7 @@ import jakarta.validation.constraints.Min;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "salidas")
@@ -25,7 +26,7 @@ public class Salida {
 
     @Min(1)
     @Column(name = "cantidad_entregada")
-    private int cantidadEntregada;
+    private Integer cantidadEntregada;
 
     @Column(name = "destinatario", length = 100)
     private String destinatario;
@@ -38,6 +39,8 @@ public class Salida {
 
     @Column(name = "estado", length = 20)
     private String estado;
+
+
 }
 
 

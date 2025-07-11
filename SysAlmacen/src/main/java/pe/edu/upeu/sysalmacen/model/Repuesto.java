@@ -1,13 +1,15 @@
 package pe.edu.upeu.sysalmacen.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+
+import java.time.Instant;
 
 @Entity
 @Table(name = "Repuesto")
 @Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class Repuesto {
@@ -21,7 +23,7 @@ public class Repuesto {
     private String nombre;
 
     @Column(nullable = false, name = "re_stock_actual" )
-    private int  stockActual;
+    private Integer stockActual;
 
     @Column(nullable = false, length = 20, name = "re_codigo")
     private String codigo;
@@ -33,7 +35,7 @@ public class Repuesto {
     private String estado; // activo, mantenimiento, inactivo
 
     @Column(nullable = false, name = "re_stock_minimo")
-    private int  stockMinimo;
+    private Integer  stockMinimo;
     @ManyToOne
     @JoinColumn(name = "id_categoria", referencedColumnName =
             "id_categoria",nullable = false, foreignKey = @ForeignKey(name =
@@ -49,4 +51,15 @@ public class Repuesto {
             nullable = false, foreignKey = @ForeignKey(name =
             "FK_UNIDADMEDIDA_PRODUCTO"))
     private UnidadMedida unidadMedida;
+
+
+
+    public Integer getStockActual() {
+        return stockActual;
+    }
+
+    public void setStockActual(Integer stockActual) {
+        this.stockActual = stockActual;
+    }
+
 }

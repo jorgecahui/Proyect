@@ -13,11 +13,11 @@ import lombok.NoArgsConstructor;
 public class RepuestoDTO {
     private Long idRepuesto;
     private String nombre;
-    private String stockActual;
+    private Integer stockActual;
     private String codigo;
     private String ubicacion;
     private String estado;
-    private String stockMinimo;
+    private Integer stockMinimo;
     @NotNull(message = "La categoría no puede ser nula")
     private CategoriaDTO categoria;
     @NotNull(message = "La marca no puede ser nula")
@@ -34,8 +34,11 @@ public class RepuestoDTO {
     String nombre,
     @NotNull(message = "El stock no puede ser nulo")
     @DecimalMin(value = "0.0", inclusive = true, message = "El stock debe ser mayor o igual a 0")
-    String stockActual,
+    Integer stockActual,
     @NotNull(message = "El codigo no puede ser nulo")
+    @NotNull(message = "El stock mínimo no puede ser nulo")
+    @DecimalMin(value = "0", message = "El stock mínimo debe ser mayor o igual a 0")
+    Integer stockMinimo,
     @Size(min = 2, max = 120, message = "El nombre debe tener entre 2 y 120 caracteres")
     String codigo,
     @NotNull(message = "El Ubicacion no puede ser nulo")

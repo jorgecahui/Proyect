@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import pe.edu.upeu.sysalmacen.dtos.CrearSalidaDTO;
 import pe.edu.upeu.sysalmacen.dtos.SalidaDTO;
 import pe.edu.upeu.sysalmacen.service.SalidaService;
 
@@ -43,6 +44,15 @@ public class SalidaController {
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         salidaService.delete(id);
         return ResponseEntity.noContent().build();
+    }
+    @PostMapping("/registrar")      // POST /api/salidas/registrar
+    public ResponseEntity<SalidaDTO> registrarSalida(
+            @Valid @RequestBody CrearSalidaDTO dto) {
+
+        SalidaDTO salidaRegistrada =
+                salidaService.registrarSalida(dto.getIdRepuesto(), dto.getCantidad());
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(salidaRegistrada);
     }
 }
 

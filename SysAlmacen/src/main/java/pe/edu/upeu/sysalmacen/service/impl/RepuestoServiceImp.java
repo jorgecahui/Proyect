@@ -14,6 +14,7 @@ import pe.edu.upeu.sysalmacen.dtos.RepuestoDTO;
 
 import pe.edu.upeu.sysalmacen.dtos.report.RepMasVendidos;
 
+import pe.edu.upeu.sysalmacen.exception.StockInsuficienteException;
 import pe.edu.upeu.sysalmacen.mappers.RepuestoMapper;
 import pe.edu.upeu.sysalmacen.model.*;
 import pe.edu.upeu.sysalmacen.repository.*;
@@ -108,4 +109,14 @@ public class RepuestoServiceImp extends CrudGenericoServiceImp<Repuesto, Long> i
     public Page<Repuesto> listaPage(Pageable pageable){
         return repo.findAll(pageable);
     }
+
+    public void validarStock(Long idRepuesto, Integer cantidad) {
+        Repuesto repuesto = findById(idRepuesto);
+        if (repuesto.getStockActual() < cantidad) {
+            throw new StockInsuficienteException(
+                    "Stock insuficiente. Disponible: " + repuesto.getStockActual()
+            );
+        }
+    }
+
 }
