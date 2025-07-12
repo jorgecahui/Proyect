@@ -12,8 +12,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 
-public interface IProductoService extends ICrudGenericoService<Producto,
-        Long>{
+public interface IProductoService extends ICrudGenericoService<Producto, Long>{
     ProductoDTO saveD(ProductoDTO.ProductoCADto dto);
     ProductoDTO updateD(ProductoDTO.ProductoCADto dto, Long id);
 

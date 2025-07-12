@@ -7,7 +7,7 @@ import {
 } from '@angular/forms';
 import { Salida } from '../../../modelo/Salida';
 import { SalidaService } from '../../../servicio/salida.service';
-import { switchMap } from 'rxjs';
+import {switchMap, tap} from 'rxjs';
 
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -18,7 +18,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MaterialModule } from '../../../material/material.module';
 import { RepuestoService } from '../../../servicio/repuesto.service';
 import { Repuesto } from '../../../modelo/Repuesto';
-import { CommonModule } from '@angular/common';
+import {CommonModule, formatDate} from '@angular/common';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 @Component({
@@ -60,7 +60,9 @@ export class FormSalidaComponent implements OnInit {
       destinatario: ['', Validators.required],
       codigo: [''],
       fechaSalida: [new Date(), Validators.required],
-      estado: ['']
+      estado: [''],
+      nombreRepuesto: ['', Validators.required]
+
     });
 
     this.listarRepuestos();
@@ -76,7 +78,8 @@ export class FormSalidaComponent implements OnInit {
         destinatario: this.data.destinatario ?? '',
         codigo: this.data.codigo ?? '',
         fechaSalida: new Date(),
-        estado: 'PENDIENTE'
+        estado: 'PENDIENTE',
+        nombreRepuesto: this.data.nombreRepuesto
       });
     }
   }
@@ -96,35 +99,82 @@ export class FormSalidaComponent implements OnInit {
         destinatario: data.destinatario,
         codigo: data.codigo,
         fechaSalida: new Date(data.fechaSalida),
-        estado: data.estado
+        estado: data.estado,
+        nombreRepuesto:data.nombreRepuesto
       });
     });
   }
 
-  guardar() {
-    const salida: Salida = this.form.value;
-
-    if (this.isEdit) {
-      this.salidaService.update(this.id, salida).pipe(
-        switchMap(() => this.salidaService.findAll())
-      ).subscribe(data => {
-        this.salidaService.setEntidadChange(data);
-        this.salidaService.setMessageChange('Actualizado correctamente');
-        this.dialogRef.close('guardado');
-      });
-    } else {
-      this.salidaService.save(salida).pipe(
-        switchMap(() => this.salidaService.findAll())
-      ).subscribe(data => {
-        this.salidaService.setEntidadChange(data);
-        this.salidaService.setMessageChange('Creado correctamente');
-        this.dialogRef.close('guardado');
-      });
+  guardar(): void {
+    if (this.form.invalid) {
+      this.form.markAllAsTouched();
+      console.error('Errores:', this.getFormErrors());
+      return;
     }
+
+    const salida = {
+      ...this.form.value,
+      
+      id: this.isEdit ? this.form.value.id : null,
+      idRepuesto: Number(this.form.value.idRepuesto),
+      cantidadEntregada: Number(this.form.value.cantidadEntregada),
+      destinatario: this.form.value.destinatario.trim(),
+      codigo: this.form.value.codigo || '',
+      fechaSalida: formatDate(this.form.value.fechaSalida, 'yyyy-MM-dd', 'en-US'),
+      estado: this.form.value.estado,
+
+
+
+    };
+    console.log('Datos a guardar:', salida);
+    const operation = this.isEdit ?
+      this.salidaService.update(salida.id, salida) :
+      this.salidaService.save(salida);
+
+    operation.pipe(
+      tap(() => {
+        const mensaje = this.isEdit ?
+          'Salida actualizada correctamente' :
+          'Salida creada correctamente';
+        this.salidaService.setMensajeCambio(mensaje);
+      }),
+      switchMap(() => this.salidaService.findAll())
+    ).subscribe({
+      next: (data) => {
+        this.salidaService.setEntidadCambio(data);
+        this.dialogRef.close('guardado');
+      },
+      error: (error) => {
+        console.error('Error al guardar:', error);
+        this.salidaService.setMensajeCambio('Error al guardar la salida');
+      }
+    });
   }
+
 
   cancelar() {
     this.dialogRef.close();
+  }
+  private getFormErrors() {
+    const errors: { [key: string]: any } = {}; 
+    Object.keys(this.form.controls).forEach(key => {
+      const control = this.form.get(key);
+      if (control?.errors) {
+        errors[key] = control.errors;
+      }
+    });
+    return errors;
+  }
+  actualizarNombreRepuesto(idRepuesto: number) {
+    
+    const repuestoSeleccionado = this.repuestos.find(r => r.idRepuesto === idRepuesto);
+
+    if (repuestoSeleccionado) {
+      
+      this.form.patchValue({
+        nombreRepuesto: repuestoSeleccionado.nombre
+      });
+    }
   }
 }
 

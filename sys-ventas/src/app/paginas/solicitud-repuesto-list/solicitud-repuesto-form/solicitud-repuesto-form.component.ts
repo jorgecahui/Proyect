@@ -9,6 +9,7 @@ import {NgForOf} from '@angular/common';
 
 @Component({
   selector: 'app-solicitud-repuesto-form',
+  standalone: true,
   templateUrl: './solicitud-repuesto-form.component.html',
   imports: [
     ReactiveFormsModule,
@@ -42,13 +43,16 @@ export class SolicitudRepuestoFormComponent implements OnInit {
     this.isEditMode = this.data?.isEdit || false;
 
     this.solicitudForm = this.fb.group({
+      id_SolicitudRepuesto: [this.isEditMode ? this.data.solicitud?.id_SolicitudRepuesto : null],
       fecha: ['', Validators.required],
       cantidad: ['', [Validators.required, Validators.min(1)]],
       motivo: ['', [Validators.required, Validators.maxLength(200)]],
       estado: [this.isEditMode ? this.data.solicitud?.estado : 'Pendiente'],
-      usuarioId: ['', Validators.required],
-      repuestoId: ['', Validators.required],
-      busId: ['', Validators.required],
+      idUsuario: ['', Validators.required],
+      idRepuesto: ['', Validators.required],
+      idBus: ['', Validators.required],
+      nombre: [{ value: '', disabled: true }], // opcional, solo para visualización
+      placa: [{ value: '', disabled: true }]
     });
 
     if (this.isEditMode && this.data?.solicitud) {
@@ -66,7 +70,6 @@ export class SolicitudRepuestoFormComponent implements OnInit {
 
   onSubmit(): void {
     if (this.solicitudForm.invalid) return;
-
     const formValue = this.solicitudForm.value;
 
     if (this.isEditMode) {

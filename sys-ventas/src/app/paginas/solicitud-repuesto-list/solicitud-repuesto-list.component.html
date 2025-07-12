@@ -42,13 +42,13 @@
               </ng-container>
 
               <!-- Bus: placaBus -->
-              <ng-container *ngSwitchCase="'placaBus'">
-                {{ solicitud.placaBus }}
+              <ng-container *ngSwitchCase="'Busplaca'">
+                {{ solicitud.placa }}
               </ng-container>
 
               <!-- Repuesto: nombreRepuesto -->
               <ng-container *ngSwitchCase="'nombreRepuesto'">
-                {{ solicitud.nombreRepuesto }}
+                {{ solicitud.nombre }}
               </ng-container>
 
 
@@ -65,15 +65,16 @@
 
               <!-- Acciones -->
               <ng-container *ngSwitchCase="'acciones'">
-                <button mat-icon-button color="primary" (click)="openEditDialog(solicitud)">
+                <button mat-icon-button color="primary"
+                        (click)="openEditDialog(solicitud)">
                   <mat-icon>edit</mat-icon>
                 </button>
                 <button mat-icon-button color="primary" *ngIf="solicitud.estado === 'Pendiente'"
-                        (click)="cambiarEstado(solicitud.idSolicitudRepuesto, 'Aprobado')">
+                        (click)="cambiarEstado(solicitud.id_SolicitudRepuesto, 'Aprobado')">
                   <mat-icon>check_circle</mat-icon>
                 </button>
                 <button mat-icon-button color="warn" *ngIf="solicitud.estado === 'Pendiente'"
-                        (click)="cambiarEstado(solicitud.idSolicitudRepuesto, 'Rechazado')">
+                        (click)="cambiarEstado(solicitud.id_SolicitudRepuesto, 'Rechazado')">
                   <mat-icon>cancel</mat-icon>
                 </button>
               </ng-container>

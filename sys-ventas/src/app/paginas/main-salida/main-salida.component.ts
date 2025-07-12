@@ -18,7 +18,6 @@ import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 
 import { MaterialModule } from '../../material/material.module';
 
-// ✅ IMPORT CORRECTO del componente usado en MatDialog
 import { FormSalidaComponent } from './form-salida/form-salida.component';
 
 import jsPDF from 'jspdf';
@@ -41,7 +40,6 @@ import autoTable from 'jspdf-autotable';
     MatButtonModule,
     MatDialogModule,
     MaterialModule,
-    FormSalidaComponent 
   ]
 })
 export class MainSalidaComponent implements OnInit {
@@ -58,6 +56,10 @@ export class MainSalidaComponent implements OnInit {
 
   dataSource!: MatTableDataSource<Salida>;
   repuestos: Repuesto[] = [];
+
+  totalSalidas: number = 0;
+  totalEntregados: number = 0;
+  totalPendientes: number = 0;
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
@@ -81,6 +83,10 @@ export class MainSalidaComponent implements OnInit {
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
 
+        this.totalSalidas = data.length;
+        this.totalEntregados = data.filter(s => s.estado?.toLowerCase() === 'entregado').length;
+        this.totalPendientes = data.filter(s => s.estado?.toLowerCase() === 'pendiente').length;
+
         this.dataSource.filterPredicate = (data: Salida, filter: string) => {
           const texto = filter.trim().toLowerCase();
           const nombreRepuesto = data.nombreRepuesto?.toLowerCase() ?? '';
@@ -95,8 +101,8 @@ export class MainSalidaComponent implements OnInit {
     });
   }
 
-  nombreRepuesto(idRepuesto: number): string {
-    const repuesto = this.repuestos.find(r => r.id === idRepuesto);
+  nombreRepuesto(nombreRepuesto: string): string {
+    const repuesto = this.repuestos.find(r => r.nombre === nombreRepuesto);
     return repuesto ? repuesto.nombre : 'Desconocido';
   }
 
@@ -137,7 +143,7 @@ export class MainSalidaComponent implements OnInit {
     const data: (string | number)[][] = [
       ['ID', salida.id ?? ''],
       ['Código', salida.codigo ?? ''],
-      ['Repuesto', salida.idRepuesto != null ? this.nombreRepuesto(salida.idRepuesto) : 'Desconocido'],
+      ['Repuesto', salida.nombreRepuesto != null ? this.nombreRepuesto(salida.nombreRepuesto) : 'Desconocido'],
       ['Cantidad Entregada', salida.cantidadEntregada],
       ['Destinatario', salida.destinatario],
       ['Fecha de Salida', new Date(salida.fechaSalida).toLocaleDateString()],
@@ -147,12 +153,13 @@ export class MainSalidaComponent implements OnInit {
     autoTable(doc, {
       startY: 30,
       head: [['Campo', 'Valor']],
-      body: data.map(row => row.map(cell => cell ?? '')) // prevenir undefined
+      body: data.map(row => row.map(cell => cell ?? '')) 
     });
 
     doc.save(`salida-${salida.id}.pdf`);
   }
 }
+
 
 
 

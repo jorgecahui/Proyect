@@ -2,25 +2,26 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Salida } from '../modelo/Salida';
 import { Observable, Subject, map } from 'rxjs';
+import { environment } from '../../environments/environment';
+import { GenericService } from './generic.service';
 
 @Injectable({
   providedIn: 'root'
 })
-export class SalidaService {
-  private url: string = 'http://localhost:6161/api/salidas';
-
-  
+export class SalidaService extends GenericService<Salida> {
   private entidadCambio = new Subject<Salida[]>();
   private mensajeCambio = new Subject<string>();
 
-  constructor(private http: HttpClient) {}
+  constructor(protected override http: HttpClient) {
+    super(http, `${environment.HOST}/api/salidas`);
+  }
 
-  
+  // Métodos para notificar cambios
   getEntidadChange(): Observable<Salida[]> {
     return this.entidadCambio.asObservable();
   }
 
-  setEntidadChange(lista: Salida[]) {
+  setEntidadChange(lista: Salida[]): void {
     this.entidadCambio.next(lista);
   }
 
@@ -28,16 +29,29 @@ export class SalidaService {
     return this.mensajeCambio.asObservable();
   }
 
-  setMessageChange(mensaje: string) {
+  setMessageChange(mensaje: string): void {
     this.mensajeCambio.next(mensaje);
   }
 
-  
-  findAll(): Observable<Salida[]> {
-    return this.http.get<Salida[]>(this.url);
+  // Métodos CRUD
+  findAllf(): Observable<Salida[]> {
+    return this.listar();
   }
 
-  findById(id: number): Observable<Salida> {
+  listar(): Observable<Salida[]> {
+    return this.http.get<Salida[]>(this.url).pipe(
+      map(salidas => salidas.map(salida => ({
+        ...salida,
+        fechaSalida: new Date(salida.fechaSalida)
+      })))
+    );
+  }
+
+  findByIdf(id: number): Observable<Salida> {
+    return this.buscarid(id);
+  }
+
+  buscarid(id: number): Observable<Salida> {
     return this.http.get<any>(`${this.url}/${id}`).pipe(
       map(data => ({
         id: data.id,
@@ -52,23 +66,50 @@ export class SalidaService {
     );
   }
 
-  
-  save(salida: Omit<Salida, 'id'>): Observable<Salida> {
-    return this.http.post<Salida>(this.url, salida);
-  } 
 
-  
-  update(id: number, salida: Salida): Observable<void> {
-    return this.http.put<void>(`${this.url}/${id}`, salida);
+
+  guardar(salida: Omit<Salida, 'id'>): Observable<Salida> {
+    const salidaToSave = {
+      ...salida,
+      fechaSalida: salida.fechaSalida instanceof Date ?
+        salida.fechaSalida.toISOString().split('T')[0] :
+        salida.fechaSalida
+    };
+    return this.http.post<Salida>(this.url, salidaToSave).pipe(
+      map(response => ({
+        ...response,
+        fechaSalida: new Date(response.fechaSalida)
+      }))
+    );
   }
 
-  
-  delete(id: number): Observable<void> {
+  updatef(id: number, salida: Salida): Observable<void> {
+    return this.actualizaer(id, salida);
+  }
+
+  actualizaer(id: number, salida: Salida): Observable<void> {
+    const salidaToUpdate = {
+      ...salida,
+      fechaSalida: salida.fechaSalida instanceof Date ?
+        salida.fechaSalida.toISOString().split('T')[0] :
+        salida.fechaSalida
+    };
+    return this.http.put<void>(`${this.url}/${id}`, salidaToUpdate);
+  }
+
+  deletef(id: number): Observable<void> {
+    return this.Eliminar(id);
+  }
+
+  Eliminar(id: number): Observable<void> {
     return this.http.delete<void>(`${this.url}/${id}`);
   }
+  // En SalidaService
+  setEntidadCambio(lista: Salida[]): void {
+    this.entidadCambio.next(lista);
+  }
+
+  setMensajeCambio(mensaje: string): void {
+    this.mensajeCambio.next(mensaje);
+  }
 }
-
-
-
-
-

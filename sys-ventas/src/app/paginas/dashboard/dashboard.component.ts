@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AccesoService } from '../../servicio/acceso.service';
-//import { JwtHelperService } from '@auth0/angular-jwt';
+import { JwtHelperService } from '@auth0/angular-jwt';
 import { environment } from '../../../environments/environment.development';
 
 @Component({
@@ -11,10 +11,11 @@ import { environment } from '../../../environments/environment.development';
   styleUrl: './dashboard.component.css'
 })
 export class DashboardComponent implements OnInit {
-  username: string="Bienvenido";
+  username: string="Bienvenido: ";
   constructor(private accesoService: AccesoService){}
   ngOnInit(): void {
-  /*  console.log("Llega aqui:"+this.username);
+  console.log("Llega aqui:"+this.username);
+  console.log("hola"+this.accesoService)
   const helper = new JwtHelperService();
   const token = sessionStorage.getItem(environment.TOKEN_NAME);
 
@@ -23,7 +24,7 @@ export class DashboardComponent implements OnInit {
   this.username = decodedToken.sub;
   }
     this.accesoService.getAccesosByUser(this.username).subscribe(data => this.accesoService.setAccesosChange(data));
-  */
+
   }
  }
 

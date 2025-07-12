@@ -1,59 +1,45 @@
-import {Repuesto} from '../modelo/Repuesto';
+import {Injectable} from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import {GenericService} from './generic.service';
-import {Injectable, Inject} from '@angular/core';
 import { environment } from '../../environments/environment';
-import {BehaviorSubject, Observable} from 'rxjs';
-import { tap } from 'rxjs/operators';
+import {Repuesto, RepuestoReport} from '../modelo/Repuesto';
+import {GenericService} from './generic.service';
+import {BehaviorSubject, Observable, Subject, tap} from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 
 export class RepuestoService extends GenericService<Repuesto>{
-  private repuestosSubject = new BehaviorSubject<Repuesto[]>([]);
-  private messageSubject = new BehaviorSubject<string>('');
+  private repuestosSubject: Subject<RepuestoReport[]>= new Subject<RepuestoReport[]>;
+  private repuestoSeleccionadoSubject = new BehaviorSubject<RepuestoReport | null>(null);
+  repuestoSeleccionado$ = this.repuestoSeleccionadoSubject.asObservable();
+
 
   constructor(protected  override http: HttpClient) {
     super(http, `${environment.HOST}/api/repuesto`);
   }
-  // Observable de la lista de repuestos
-  getRepuestos$(): Observable<Repuesto[]> {
-    return this.repuestosSubject.asObservable();
+
+  findAllOT():void{
+    this.http.get<RepuestoReport[]>(this.url).subscribe(data=>{
+      this.repuestosSubject.next(data);
+    });
   }
 
-  // Actualizar lista de repuestos
-  updateRepuestosList(repuestos: Repuesto[]): void {
-    this.repuestosSubject.next(repuestos);
+  findByIdOT(id:number){
+    return this.http.get<RepuestoReport>(this.url+`/${id}`);
+  }
+  seleccionarProducto(repuesto: RepuestoReport) {
+    console.log("SERVICE");
+    console.log(repuesto);
+    this.repuestoSeleccionadoSubject.next(repuesto);
   }
 
-  // Mensajes del servicio
-  getMessages$(): Observable<string> {
-    return this.messageSubject.asObservable();
-  }
+  //1
+  setRepuestoSubject(data: RepuestoReport[]){this.repuestosSubject.next(data);}
+  getRepuestoSubject(){return this.repuestosSubject.asObservable();}
 
-  sendMessage(message: string): void {
-    this.messageSubject.next(message);
-  }
-
-  // Métodos específicos para repuestos
-  buscarPorNombre(nombre: string): Observable<Repuesto[]> {
-    return this.http.get<Repuesto[]>(`${this.url}/buscar?nombre=${nombre}`);
-  }
-
-  actualizarStock(id: number, cantidad: number): Observable<Repuesto> {
-    return this.http.patch<Repuesto>(`${this.url}/${id}/stock`, { cantidad });
-  }
-
-  getRepuestosBajoStock(): Observable<Repuesto[]> {
-    return this.http.get<Repuesto[]>(`${this.url}/bajo-stock`);
-  }
-
-  // Sobreescribir findAll para actualizar el subject
-  override findAll(): Observable<Repuesto[]> {
-    return this.http.get<Repuesto[]>(this.url).pipe(
-      tap(repuestos => this.updateRepuestosList(repuestos))
-    );
+  listPageable(p: number, s: number){
+    return this.http.get<any>(`${this.url}/pageable?page=${p}&size=${s}`);
   }
 
 }

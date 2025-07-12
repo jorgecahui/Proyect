@@ -15,6 +15,8 @@ import {MainRecepcionComponent} from './main-recepcion/main-recepcion.component'
 import {FormRecepcionComponent} from './main-recepcion/form-recepcion/form-recepcion.component';
 import {MainSalidaComponent} from './main-salida/main-salida.component';
 import {FormSalidaComponent} from './main-salida/form-salida/form-salida.component';
+import {MainRepuestoComponent} from './main-repuesto/main-repuesto.component';
+import {FormRepuestoComponent} from './main-repuesto/form-repuesto/form-repuesto.component';
 
 
 export const pagesRoutes: Routes = [
@@ -60,6 +62,14 @@ export const pagesRoutes: Routes = [
     children: [
       { path: 'new', component: FormxProductoComponent },
       { path: 'edit/:id', component: FormxProductoComponent },
+    ], /*canActivate: [certGuard]*/
+  },
+  {
+    path: 'repuestos',
+    component: MainRepuestoComponent,
+    children: [
+      { path: 'new', component: FormRepuestoComponent },
+      { path: 'edit/:id', component: FormRepuestoComponent },
     ], /*canActivate: [certGuard]*/
   },
   {

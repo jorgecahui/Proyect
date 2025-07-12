@@ -19,7 +19,7 @@ public class SalidaDTO {
 
     private String nombreRepuesto;
 
-    private int cantidadEntregada;
+    private Integer cantidadEntregada;
 
     private String destinatario;
 
