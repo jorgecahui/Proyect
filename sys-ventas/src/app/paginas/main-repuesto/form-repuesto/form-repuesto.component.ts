@@ -30,7 +30,6 @@ import {Repuesto} from '../../../modelo/Repuesto';
     MatCardHeader,
     MatCardTitle,
     MatFormField,
-    MatHint,
     MatInput,
     MatLabel,
     MatOption,

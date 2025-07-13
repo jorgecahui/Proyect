@@ -54,5 +54,14 @@ public class SalidaController {
 
         return ResponseEntity.status(HttpStatus.CREATED).body(salidaRegistrada);
     }
+    @PutMapping("/actualizar-con-stock/{id}")
+    public ResponseEntity<SalidaDTO> actualizarSalidaConStock(
+            @PathVariable Long id,
+            @RequestBody SalidaDTO dto,
+            @RequestParam Integer diferenciaStock) {
+
+        SalidaDTO updated = salidaService.actualizarSalidaConStock(id, dto, diferenciaStock);
+        return ResponseEntity.ok(updated);
+    }
 }
 

@@ -3,7 +3,7 @@ import {
   FormBuilder,
   FormGroup,
   Validators,
-  ReactiveFormsModule
+  ReactiveFormsModule, AbstractControl, ValidationErrors
 } from '@angular/forms';
 import { Salida } from '../../../modelo/Salida';
 import { SalidaService } from '../../../servicio/salida.service';
@@ -56,7 +56,10 @@ export class FormSalidaComponent implements OnInit {
     this.form = this.fb.group({
       id: [null],
       idRepuesto: ['', Validators.required],
-      cantidadEntregada: [0, [Validators.required, Validators.min(1)]],
+      cantidadEntregada: [0,
+        [Validators.required,
+        Validators.min(1),
+        (control: AbstractControl)=> this.validateStock(control)]],
       destinatario: ['', Validators.required],
       codigo: [''],
       fechaSalida: [new Date(), Validators.required],
@@ -108,47 +111,86 @@ export class FormSalidaComponent implements OnInit {
   guardar(): void {
     if (this.form.invalid) {
       this.form.markAllAsTouched();
-      console.error('Errores:', this.getFormErrors());
       return;
     }
 
-    const salida = {
-      ...this.form.value,
-      // Asegura que idRepuesto sea number (no string)
-      id: this.isEdit ? this.form.value.id : null,
-      idRepuesto: Number(this.form.value.idRepuesto),
-      cantidadEntregada: Number(this.form.value.cantidadEntregada),
-      destinatario: this.form.value.destinatario.trim(),
-      codigo: this.form.value.codigo || '',
-      fechaSalida: formatDate(this.form.value.fechaSalida, 'yyyy-MM-dd', 'en-US'),
-      estado: this.form.value.estado,
+    const { idRepuesto, cantidadEntregada } = this.form.value;
 
+    if (!this.isEdit) {
+      // Lógica para NUEVAS salidas (actualiza stock)
+      this.registrarNuevaSalida(idRepuesto, cantidadEntregada);
+    } else {
+      // Lógica para EDITAR salidas (manejo especial de stock)
+      this.actualizarSalidaExistente(idRepuesto, cantidadEntregada);
+    }
+  }
 
-
-    };
-    console.log('Datos a guardar:', salida);
-    const operation = this.isEdit ?
-      this.salidaService.update(salida.id, salida) :
-      this.salidaService.save(salida);
-
-    operation.pipe(
-      tap(() => {
-        const mensaje = this.isEdit ?
-          'Salida actualizada correctamente' :
-          'Salida creada correctamente';
-        this.salidaService.setMensajeCambio(mensaje);
-      }),
-      switchMap(() => this.salidaService.findAll())
-    ).subscribe({
-      next: (data) => {
-        this.salidaService.setEntidadCambio(data);
+  private registrarNuevaSalida(idRepuesto: number, cantidad: number): void {
+    this.salidaService.registrarSalida(idRepuesto, cantidad).subscribe({
+      next: () => {
+        this.salidaService.setMensajeCambio('Salida registrada y stock actualizado correctamente');
         this.dialogRef.close('guardado');
       },
-      error: (error) => {
-        console.error('Error al guardar:', error);
-        this.salidaService.setMensajeCambio('Error al guardar la salida');
+      error: (err) => {
+        console.error('Error al registrar:', err);
+        this.salidaService.setMensajeCambio(err.error?.message || 'Error al registrar la salida');
       }
     });
+  }
+
+  private actualizarSalidaExistente(idRepuesto: number, nuevaCantidad: number): void {
+    // 1. Obtener la salida original para conocer la cantidad anterior
+    this.salidaService.findById(this.id).subscribe(salidaOriginal => {
+      const diferencia = nuevaCantidad - salidaOriginal.cantidadEntregada;
+
+      // 2. Preparar datos para actualización
+      const salidaActualizada = {
+        ...this.form.value,
+        idRepuesto: Number(idRepuesto),
+        cantidadEntregada: nuevaCantidad,
+        fechaSalida: formatDate(this.form.value.fechaSalida, 'yyyy-MM-dd', 'en-US')
+      };
+
+      // 3. Si la cantidad cambió, usar endpoint especial
+      if (diferencia !== 0) {
+        this.salidaService.actualizarSalidaConStock(
+          this.id,
+          salidaActualizada,
+          diferencia
+        ).subscribe({
+          next: () => this.handleSuccess('Salida y stock actualizados correctamente'),
+          error: (err) => this.handleError(err, 'Error al actualizar salida y stock')
+        });
+      } else {
+        // 4. Si la cantidad no cambió, actualización normal
+        this.salidaService.update(this.id, salidaActualizada).subscribe({
+          next: () => this.handleSuccess('Salida actualizada correctamente'),
+          error: (err) => this.handleError(err, 'Error al actualizar la salida')
+        });
+      }
+    });
+  }
+
+  private handleSuccess(message: string): void {
+    this.salidaService.setMensajeCambio(message);
+    this.dialogRef.close('guardado');
+  }
+
+  private handleError(error: any, defaultMessage: string): void {
+    console.error('Error:', error);
+    this.salidaService.setMensajeCambio(error.error?.message || defaultMessage);
+  }
+  private prepareDataForUpdate(): any {
+    return {
+      id: this.form.value.id,
+      idRepuesto: Number(this.form.value.idRepuesto),
+      cantidadEntregada: Number(this.form.value.cantidadEntregada),
+      destinatario: this.form.value.destinatario,
+      codigo: this.form.value.codigo,
+      fechaSalida: formatDate(this.form.value.fechaSalida, 'yyyy-MM-dd', 'en-US'),
+      estado: this.form.value.estado,
+      nombreRepuesto: this.form.value.nombreRepuesto
+    };
   }
 
 
@@ -175,6 +217,18 @@ export class FormSalidaComponent implements OnInit {
         nombreRepuesto: repuestoSeleccionado.nombre
       });
     }
+  }
+  private validateStock(control: AbstractControl): ValidationErrors | null {
+    const idRepuesto = this.form?.get('idRepuesto')?.value;
+    const cantidad = control.value;
+
+    if (idRepuesto && cantidad) {
+      const repuesto = this.repuestos.find(r => r.idRepuesto === idRepuesto);
+      if (repuesto && cantidad > repuesto.stockActual) {
+        return { stockInsuficiente: true };
+      }
+    }
+    return null;
   }
 }
 

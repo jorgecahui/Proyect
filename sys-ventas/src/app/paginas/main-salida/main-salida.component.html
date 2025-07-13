@@ -1,95 +1,117 @@
 <div class="contenedor-salida">
+  <!-- Título -->
   <div class="titulo-toolbar">
     📤 Salida de Repuestos
   </div>
 
-  <mat-form-field appearance="fill" class="campo-busqueda">
+  <!-- Resumen visual superior -->
+  <div class="resumen-container">
+    <div class="resumen-card total">
+      <mat-icon>inventory_2</mat-icon>
+      <div>
+        <p class="resumen-label">Total salidas</p>
+        <h3>{{ totalSalidas }}</h3>
+      </div>
+    </div>
+    <div class="resumen-card entregados">
+      <mat-icon>check_circle</mat-icon>
+      <div>
+        <p class="resumen-label">Entregados</p>
+        <h3>{{ totalEntregados }}</h3>
+      </div>
+    </div>
+    <div class="resumen-card pendientes">
+      <mat-icon>hourglass_empty</mat-icon>
+      <div>
+        <p class="resumen-label">Pendientes</p>
+        <h3>{{ totalPendientes }}</h3>
+      </div>
+    </div>
+  </div>
+
+  <!-- Filtro -->
+  <mat-form-field appearance="outline" class="campo-busqueda">
     <mat-label>Buscar repuesto o destinatario</mat-label>
     <input matInput (keyup)="applyFilter($event)" placeholder="Escribe para filtrar..." />
   </mat-form-field>
 
-  <div class="tabla-contenedor">
+  <!-- Tabla -->
+  <div class="tabla-contenedor mat-elevation-z8">
     <table mat-table [dataSource]="dataSource" matSort>
 
       <!-- ID -->
       <ng-container matColumnDef="id">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>ID</th>
-        <td mat-cell *matCellDef="let row">{{ row.id }}</td>
+        <td mat-cell *matCellDef="let salida">{{ salida.id }}</td>
       </ng-container>
 
       <!-- Repuesto -->
       <ng-container matColumnDef="repuesto">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>Repuesto</th>
-        <td mat-cell *matCellDef="let row">{{ nombreRepuesto(row.nombreRepuesto) }}</td>
+        <td mat-cell *matCellDef="let salida">{{ salida.nombreRepuesto }}</td>
       </ng-container>
 
-      <!-- Cantidad -->
+      <!-- Cantidad Entregada -->
       <ng-container matColumnDef="cantidadEntregada">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>Cantidad</th>
-        <td mat-cell *matCellDef="let row">{{ row.cantidadEntregada }}</td>
+        <td mat-cell *matCellDef="let salida">{{ salida.cantidadEntregada }}</td>
       </ng-container>
 
       <!-- Destinatario -->
       <ng-container matColumnDef="destinatario">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>Destinatario</th>
-        <td mat-cell *matCellDef="let row">{{ row.destinatario }}</td>
+        <td mat-cell *matCellDef="let salida">{{ salida.destinatario }}</td>
       </ng-container>
 
       <!-- Código -->
       <ng-container matColumnDef="codigo">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>Código</th>
-        <td mat-cell *matCellDef="let row">{{ row.codigo }}</td>
+        <td mat-cell *matCellDef="let salida">{{ salida.codigo }}</td>
       </ng-container>
 
-      <!-- Fecha -->
+      <!-- Fecha de salida -->
       <ng-container matColumnDef="fechaSalida">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>Fecha</th>
-        <td mat-cell *matCellDef="let row">{{ row.fechaSalida | date }}</td>
+        <td mat-cell *matCellDef="let salida">
+          {{ salida.fechaSalida | date: 'shortDate' }}
+        </td>
       </ng-container>
 
       <!-- Estado -->
       <ng-container matColumnDef="estado">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>Estado</th>
-        <td mat-cell *matCellDef="let row">
-          <span [ngClass]="{
-            'estado-pendiente': row.estado === 'Pendiente',
-            'estado-validado': row.estado === 'Entregado'
-          }">
-            {{ row.estado }}
+        <td mat-cell *matCellDef="let salida">
+          <span
+            [ngClass]="{
+              'estado-validado': salida.estado?.toLowerCase() === 'entregado',
+              'estado-pendiente': salida.estado?.toLowerCase() === 'pendiente'
+            }"
+          >
+            {{ salida.estado }}
           </span>
         </td>
       </ng-container>
 
-      <!-- Acción -->
+      <!-- Acciones -->
       <ng-container matColumnDef="accion">
-        <th mat-header-cell *matHeaderCellDef style="text-align: center; width: 160px;">Acción</th>
-        <td mat-cell *matCellDef="let row" class="accion-cell">
+        <th mat-header-cell *matHeaderCellDef>Acciones</th>
+        <td mat-cell *matCellDef="let salida" class="accion-cell">
           <div class="acciones-grupo">
             <div class="acciones-izquierda">
-              <button mat-icon-button color="primary" (click)="abrirDialogoEditar(row.id)" matTooltip="Editar salida">
+              <button mat-icon-button color="primary" (click)="abrirDialogoEditar(salida.id)">
                 <mat-icon>edit</mat-icon>
               </button>
-
-              <button mat-icon-button color="warn" (click)="delete(row.id)" matTooltip="Eliminar salida">
+              <button mat-icon-button color="warn" (click)="delete(salida.id)">
                 <mat-icon>delete</mat-icon>
               </button>
             </div>
-
-            <button
-              *ngIf="row.estado.toLowerCase() === 'entregado'"
-              mat-icon-button
-              color="accent"
-              class="pdf-boton"
-              (click)="generarPDF(row)"
-              matTooltip="Generar PDF de salida"
-            >
-              <mat-icon style="font-size: 24px;">picture_as_pdf</mat-icon>
+            <button mat-icon-button class="pdf-boton" (click)="generarPDF(salida)">
+              <mat-icon>picture_as_pdf</mat-icon>
             </button>
           </div>
         </td>
       </ng-container>
 
-      <!-- Filas -->
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
       <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
     </table>
@@ -97,15 +119,14 @@
     <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
   </div>
 
-  <!-- Botón flotante agregar -->
+
   <button
     mat-fab
     color="primary"
     (click)="abrirDialogoEditar()"
     matTooltip="Agregar nueva salida"
-    style="position: fixed; bottom: 2rem; right: 2rem;"
+    class="boton-flotante"
   >
     <mat-icon>add</mat-icon>
   </button>
 </div>
-

@@ -114,6 +114,34 @@ public class SalidaServiceImpl implements SalidaService {
     private String generarCodigo() {
         return "SAL-" + System.currentTimeMillis();
     }
+
+    @Transactional
+    public SalidaDTO actualizarSalidaConStock(Long id, SalidaDTO dto, Integer diferenciaStock) {
+        // 1. Obtener salida existente
+        Salida salida = salidaRepository.findById(id)
+                .orElseThrow(() -> new SalidaNotFoundException("No se encontró la salida con ID: " + id));
+
+        // 2. Obtener repuesto
+        Repuesto repuesto = repuestoRepository.findById(dto.getIdRepuesto())
+                .orElseThrow(() -> new RepuestoNotFoundException("No se encontró el repuesto con ID: " + dto.getIdRepuesto()));
+
+        // 3. Validar nuevo stock
+        int nuevoStock = repuesto.getStockActual() - diferenciaStock;
+        if (nuevoStock < 0) {
+            throw new BusinessException("Stock no puede ser negativo");
+        }
+
+        // 4. Actualizar stock
+        repuesto.setStockActual(nuevoStock);
+        repuestoRepository.save(repuesto);
+
+        // 5. Actualizar salida
+        salida.setCantidadEntregada(dto.getCantidadEntregada());
+        salida.setDestinatario(dto.getDestinatario());
+        // ... otros campos ...
+
+        return salidaMapper.toDto(salidaRepository.save(salida));
+    }
 }
 
 

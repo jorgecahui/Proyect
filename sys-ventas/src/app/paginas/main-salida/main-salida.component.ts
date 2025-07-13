@@ -18,12 +18,10 @@ import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 
 import { MaterialModule } from '../../material/material.module';
 
-// ✅ IMPORT CORRECTO del componente usado en MatDialog
 import { FormSalidaComponent } from './form-salida/form-salida.component';
 
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
-
 
 @Component({
   selector: 'app-main-salida',
@@ -42,7 +40,6 @@ import autoTable from 'jspdf-autotable';
     MatButtonModule,
     MatDialogModule,
     MaterialModule,
-
   ]
 })
 export class MainSalidaComponent implements OnInit {
@@ -59,6 +56,10 @@ export class MainSalidaComponent implements OnInit {
 
   dataSource!: MatTableDataSource<Salida>;
   repuestos: Repuesto[] = [];
+
+  totalSalidas: number = 0;
+  totalEntregados: number = 0;
+  totalPendientes: number = 0;
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
@@ -81,6 +82,10 @@ export class MainSalidaComponent implements OnInit {
         this.dataSource = new MatTableDataSource(data);
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
+
+        this.totalSalidas = data.length;
+        this.totalEntregados = data.filter(s => s.estado?.toLowerCase() === 'entregado').length;
+        this.totalPendientes = data.filter(s => s.estado?.toLowerCase() === 'pendiente').length;
 
         this.dataSource.filterPredicate = (data: Salida, filter: string) => {
           const texto = filter.trim().toLowerCase();
@@ -148,16 +153,11 @@ export class MainSalidaComponent implements OnInit {
     autoTable(doc, {
       startY: 30,
       head: [['Campo', 'Valor']],
-      body: data.map(row => row.map(cell => cell ?? '')) // prevenir undefined
+      body: data.map(row => row.map(cell => cell ?? ''))
     });
 
     doc.save(`salida-${salida.id}.pdf`);
   }
 }
-
-
-
-
-
 
 

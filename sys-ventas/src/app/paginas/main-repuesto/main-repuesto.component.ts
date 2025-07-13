@@ -23,7 +23,6 @@ import {switchMap} from 'rxjs';
   selector: 'app-main-repuesto',
   standalone: true,
   imports: [
-    MatButton,
     MatCell,
     MatCellDef,
     MatColumnDef,
