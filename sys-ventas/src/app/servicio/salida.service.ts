@@ -97,12 +97,9 @@ export class SalidaService extends GenericService<Salida> {
     return this.http.put<void>(`${this.url}/${id}`, salidaToUpdate);
   }
 
-  deletef(id: number): Observable<void> {
-    return this.Eliminar(id);
-  }
 
-  Eliminar(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.url}/${id}`);
+  deleteWithStockUpdate(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.url}/${id}/with-stock-update`);
   }
   // En SalidaService
   setEntidadCambio(lista: Salida[]): void {

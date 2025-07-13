@@ -42,7 +42,7 @@ public class SalidaController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
-        salidaService.delete(id);
+        salidaService.deleteWithStockUpdate(id);
         return ResponseEntity.noContent().build();
     }
     @PostMapping("/registrar")      // POST /api/salidas/registrar

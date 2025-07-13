@@ -115,32 +115,57 @@ public class SalidaServiceImpl implements SalidaService {
         return "SAL-" + System.currentTimeMillis();
     }
 
+    @Override
     @Transactional
-    public SalidaDTO actualizarSalidaConStock(Long id, SalidaDTO dto, Integer diferenciaStock) {
-        // 1. Obtener salida existente
+    public SalidaDTO actualizarSalidaConStock(Long id, SalidaDTO dto, Integer diferenciaStock) throws BusinessException {
         Salida salida = salidaRepository.findById(id)
                 .orElseThrow(() -> new SalidaNotFoundException("No se encontró la salida con ID: " + id));
 
-        // 2. Obtener repuesto
-        Repuesto repuesto = repuestoRepository.findById(dto.getIdRepuesto())
-                .orElseThrow(() -> new RepuestoNotFoundException("No se encontró el repuesto con ID: " + dto.getIdRepuesto()));
-
-        // 3. Validar nuevo stock
-        int nuevoStock = repuesto.getStockActual() - diferenciaStock;
-        if (nuevoStock < 0) {
-            throw new BusinessException("Stock no puede ser negativo");
+        // Validar que no se cambie el repuesto
+        if (!salida.getRepuesto().getIdRepuesto().equals(dto.getIdRepuesto())) {
+            throw new BusinessException("No se puede cambiar el repuesto de una salida existente");
         }
 
-        // 4. Actualizar stock
+        Repuesto repuesto = repuestoRepository.findById(dto.getIdRepuesto())
+                .orElseThrow(() -> new RepuestoNotFoundException("Repuesto no encontrado"));
+
+        // Validar nuevo stock
+        int nuevoStock = repuesto.getStockActual() - diferenciaStock;
+        if (nuevoStock < 0) {
+            throw new BusinessException(String.format(
+                    "Stock insuficiente. Disponible: %d, Diferencia solicitada: %d",
+                    repuesto.getStockActual(), diferenciaStock));
+        }
+
+        // Actualizar stock
         repuesto.setStockActual(nuevoStock);
         repuestoRepository.save(repuesto);
 
-        // 5. Actualizar salida
+        // Actualizar salida
         salida.setCantidadEntregada(dto.getCantidadEntregada());
         salida.setDestinatario(dto.getDestinatario());
-        // ... otros campos ...
+        salida.setCodigo(dto.getCodigo());
+        salida.setFechaSalida(dto.getFechaSalida());
+        salida.setEstado(dto.getEstado());
 
         return salidaMapper.toDto(salidaRepository.save(salida));
+    }
+
+    @Transactional
+    public void deleteWithStockUpdate(Long id) {
+        // 1. Obtener la salida a eliminar
+        Salida salida = salidaRepository.findById(id)
+                .orElseThrow(() -> new SalidaNotFoundException("Salida no encontrada con ID: " + id));
+
+        // 2. Obtener el repuesto asociado
+        Repuesto repuesto = salida.getRepuesto();
+
+        // 3. Actualizar el stock (sumar la cantidad eliminada)
+        repuesto.setStockActual(repuesto.getStockActual() + salida.getCantidadEntregada());
+        repuestoRepository.save(repuesto);
+
+        // 4. Eliminar la salida
+        salidaRepository.delete(salida);
     }
 }
 

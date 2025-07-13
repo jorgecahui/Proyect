@@ -112,9 +112,19 @@ export class MainSalidaComponent implements OnInit {
   }
 
   delete(id: number) {
-    this.salidaService.delete(id).subscribe(() => {
-      this.cargarDatos();
-    });
+    if (confirm('¿Está seguro de eliminar esta salida? Esto actualizará el stock del repuesto.')) {
+      this.salidaService.delete(id).subscribe({
+        next: () => {
+          this.salidaService.setMensajeCambio('Salida eliminada y stock actualizado correctamente');
+          this.cargarDatos(); // Recargar los datos actualizados
+          this.repuestoService.findAll().subscribe(); // Opcional: refrescar lista de repuestos
+        },
+        error: (err) => {
+          console.error('Error al eliminar:', err);
+          this.salidaService.setMensajeCambio(err.error?.message || 'Error al eliminar la salida');
+        }
+      });
+    }
   }
 
   abrirDialogoEditar(id?: number) {
