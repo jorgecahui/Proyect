@@ -99,7 +99,7 @@ public class SalidaServiceImpl implements SalidaService {
         salida.setFechaSalida(LocalDate.now());
         salida.setDestinatario(destinatario);
         salida.setCodigo(generarCodigo());
-        salida.setEstado("ENTREGADO");
+        salida.setEstado("PENDIENTE");
 
         // 4. Actualizar stock del repuesto
         repuesto.setStockActual(repuesto.getStockActual() - cantidad);

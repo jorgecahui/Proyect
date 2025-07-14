@@ -18,6 +18,7 @@ import {ProductoReport} from '../../modelo/Producto';
 import {RepuestoService} from '../../servicio/repuesto.service';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {switchMap} from 'rxjs';
+import {NgClass} from '@angular/common';
 
 @Component({
   selector: 'app-main-repuesto',
@@ -43,7 +44,8 @@ import {switchMap} from 'rxjs';
     RouterLink,
     RouterOutlet,
     MatHeaderCellDef,
-    MatNoDataRow
+    MatNoDataRow,
+    NgClass,
   ],
   templateUrl: './main-repuesto.component.html',
   styleUrl: './main-repuesto.component.css'
@@ -61,6 +63,7 @@ export class MainRepuestoComponent implements OnInit {
   @ViewChild(MatSort) sort!: MatSort;
   totalElements: number = 0;
   dataSource!: MatTableDataSource<ProductoReport>;
+  row: any;
   constructor(private repuestoService: RepuestoService, private _snackBar: MatSnackBar) {}
 
   ngOnInit(): void {
