@@ -5,10 +5,8 @@ import {
   Validators,
   ReactiveFormsModule, AbstractControl, ValidationErrors
 } from '@angular/forms';
-import { Salida } from '../../../modelo/Salida';
 import { SalidaService } from '../../../servicio/salida.service';
 import {switchMap, tap} from 'rxjs';
-
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatDatepickerModule } from '@angular/material/datepicker';
@@ -61,7 +59,7 @@ export class FormSalidaComponent implements OnInit {
         Validators.min(1),
         (control: AbstractControl)=> this.validateStock(control)]],
       destinatario: ['', Validators.required],
-      codigo: [''],
+      codigo: ['',Validators.required],
       fechaSalida: [new Date(), Validators.required],
       estado: [''],
       nombreRepuesto: ['', Validators.required]
@@ -114,19 +112,19 @@ export class FormSalidaComponent implements OnInit {
       return;
     }
 
-    const { idRepuesto, cantidadEntregada } = this.form.value;
+    const { idRepuesto, cantidadEntregada, destinatario } = this.form.value;
 
     if (!this.isEdit) {
       // Lógica para NUEVAS salidas (actualiza stock)
-      this.registrarNuevaSalida(idRepuesto, cantidadEntregada);
+      this.registrarNuevaSalida(idRepuesto, cantidadEntregada, destinatario);
     } else {
       // Lógica para EDITAR salidas (manejo especial de stock)
       this.actualizarSalidaExistente(idRepuesto, cantidadEntregada);
     }
   }
 
-  private registrarNuevaSalida(idRepuesto: number, cantidad: number): void {
-    this.salidaService.registrarSalida(idRepuesto, cantidad).subscribe({
+  private registrarNuevaSalida(idRepuesto: number, cantidad: number, destinatario: string): void {
+    this.salidaService.registrarSalida(idRepuesto, cantidad, destinatario).subscribe({
       next: () => {
         this.salidaService.setMensajeCambio('Salida registrada y stock actualizado correctamente');
         this.dialogRef.close('guardado');
@@ -137,6 +135,7 @@ export class FormSalidaComponent implements OnInit {
       }
     });
   }
+
 
   private actualizarSalidaExistente(idRepuesto: number, nuevaCantidad: number): void {
     // 1. Obtener la salida original para conocer la cantidad anterior

@@ -80,7 +80,7 @@ public class SalidaServiceImpl implements SalidaService {
 
     @Override
     @Transactional
-    public SalidaDTO registrarSalida(Long idRepuesto, Integer cantidad) {
+    public SalidaDTO registrarSalida(Long idRepuesto, Integer cantidad, String destinatario) {
         // 1. Verificar existencia del repuesto
         Repuesto repuesto = repuestoRepository.findById(idRepuesto)
                 .orElseThrow(() -> new EntityNotFoundException("Repuesto no encontrado"));
@@ -97,7 +97,9 @@ public class SalidaServiceImpl implements SalidaService {
         salida.setRepuesto(repuesto);
         salida.setCantidadEntregada(cantidad);
         salida.setFechaSalida(LocalDate.now());
-        salida.setEstado("COMPLETADO");
+        salida.setDestinatario(destinatario);
+        salida.setCodigo(generarCodigo());
+        salida.setEstado("ENTREGADO");
 
         // 4. Actualizar stock del repuesto
         repuesto.setStockActual(repuesto.getStockActual() - cantidad);

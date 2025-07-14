@@ -6,4 +6,6 @@ import lombok.Data;
 public class CrearSalidaDTO {
     private Long idRepuesto;
     private Integer cantidad;
+    private String destinatario;
+    private String codigo;
 }

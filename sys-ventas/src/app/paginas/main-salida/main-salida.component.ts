@@ -22,6 +22,7 @@ import { FormSalidaComponent } from './form-salida/form-salida.component';
 
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
+import {MatTooltip} from '@angular/material/tooltip';
 
 @Component({
   selector: 'app-main-salida',
@@ -40,6 +41,7 @@ import autoTable from 'jspdf-autotable';
     MatButtonModule,
     MatDialogModule,
     MaterialModule,
+    MatTooltip,
   ]
 })
 export class MainSalidaComponent implements OnInit {
@@ -89,12 +91,15 @@ export class MainSalidaComponent implements OnInit {
 
         this.dataSource.filterPredicate = (data: Salida, filter: string) => {
           const texto = filter.trim().toLowerCase();
-          const nombreRepuesto = data.nombreRepuesto?.toLowerCase() ?? '';
+          const nombreRepuesto = (data.nombreRepuesto || '').toString().toLowerCase();
+          const destinatario = (data.destinatario || '').toString().toLowerCase();
+          const codigo = (data.codigo || '').toString().toLowerCase();
+          const estado = (data.estado || '').toString().toLowerCase();
           return (
             nombreRepuesto.includes(texto) ||
-            data.destinatario.toLowerCase().includes(texto) ||
-            data.codigo.toLowerCase().includes(texto) ||
-            data.estado.toLowerCase().includes(texto)
+            destinatario.includes(texto) ||
+            codigo.includes(texto) ||
+            estado.includes(texto)
           );
         };
       });
@@ -108,7 +113,14 @@ export class MainSalidaComponent implements OnInit {
 
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
+    if (!this.dataSource) {
+      console.warn('DataSource no está inicializado');
+      return;
+    }
     this.dataSource.filter = filterValue.trim().toLowerCase();
+    if (this.dataSource.paginator) {
+      this.dataSource.paginator.firstPage();
+    }
   }
 
   delete(id: number) {

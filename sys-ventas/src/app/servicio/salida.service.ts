@@ -109,10 +109,11 @@ export class SalidaService extends GenericService<Salida> {
   setMensajeCambio(mensaje: string): void {
     this.mensajeCambio.next(mensaje);
   }
-  registrarSalida(idRepuesto: number, cantidad: number): Observable<any> {
+  registrarSalida(idRepuesto: number, cantidad: number, destinatario:string): Observable<any> {
     return this.http.post(`${this.url}/registrar`, {
       idRepuesto,
-      cantidad
+      cantidad,
+      destinatario
     });
   }
   actualizarSalidaConStock(id: number, salida: any, diferenciaStock: number): Observable<any> {

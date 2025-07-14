@@ -12,7 +12,7 @@ public interface SalidaService {
     SalidaDTO save(SalidaDTO dto);
     SalidaDTO update(Long id, SalidaDTO dto);
     void delete(Long id);
-    SalidaDTO registrarSalida(Long idRepuesto, Integer cantidad);
+    SalidaDTO registrarSalida(Long idRepuesto, Integer cantidad, String destinatario);
     void deleteWithStockUpdate(Long id) throws BusinessException;
     SalidaDTO actualizarSalidaConStock(Long id, SalidaDTO dto, Integer diferenciaStock);
 }

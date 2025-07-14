@@ -50,7 +50,7 @@ public class SalidaController {
             @Valid @RequestBody CrearSalidaDTO dto) {
 
         SalidaDTO salidaRegistrada =
-                salidaService.registrarSalida(dto.getIdRepuesto(), dto.getCantidad());
+                salidaService.registrarSalida(dto.getIdRepuesto(), dto.getCantidad(),dto.getDestinatario());
 
         return ResponseEntity.status(HttpStatus.CREATED).body(salidaRegistrada);
     }
