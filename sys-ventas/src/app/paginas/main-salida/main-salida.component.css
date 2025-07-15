@@ -28,10 +28,20 @@
   padding: 2rem;
 }
 
-.estado-pendiente {
-  background-color: #ffeb3b !important;
+.estado-validado {
+  background-color: #4caf50; /* verde */
+  color: white;
+  padding: 4px 8px;
   border-radius: 8px;
-  color: #333 !important;
+  font-size: 0.9em;
+}
+
+.estado-pendiente {
+  background-color: #fbc02d; /* amarillo */
+  color: black;
+  padding: 4px 8px;
+  border-radius: 8px;
+  font-size: 0.9em;
 }
 
 .pdf-boton {
