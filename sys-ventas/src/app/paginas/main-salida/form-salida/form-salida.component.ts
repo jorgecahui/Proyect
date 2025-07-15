@@ -6,7 +6,7 @@ import {
   ReactiveFormsModule, AbstractControl, ValidationErrors
 } from '@angular/forms';
 import { SalidaService } from '../../../servicio/salida.service';
-import {switchMap, tap} from 'rxjs';
+import {debounceTime, distinctUntilChanged, switchMap, tap} from 'rxjs';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatDatepickerModule } from '@angular/material/datepicker';
@@ -41,6 +41,7 @@ export class FormSalidaComponent implements OnInit {
   isEdit: boolean = false;
   id!: number;
   repuestos: Repuesto[] = [];
+  repuestosFiltrados: Repuesto[] = [];
 
   constructor(
     private fb: FormBuilder,
@@ -66,6 +67,7 @@ export class FormSalidaComponent implements OnInit {
 
     });
 
+    this.configurarAutocompletado();
     this.listarRepuestos();
 
     if (this.data?.id) {
@@ -85,9 +87,21 @@ export class FormSalidaComponent implements OnInit {
     }
   }
 
+  private configurarAutocompletado(): void {
+    this.form.get('nombreRepuesto')?.valueChanges
+      .pipe(
+        debounceTime(300),
+        distinctUntilChanged(),
+        tap(() => this.filtrarRepuestos())
+      )
+      .subscribe();
+  }
+
+
   listarRepuestos() {
     this.repuestoService.findAll().subscribe((data: Repuesto[]) => {
       this.repuestos = data;
+      this.repuestosFiltrados = data;
     });
   }
 
@@ -229,6 +243,26 @@ export class FormSalidaComponent implements OnInit {
     }
     return null;
   }
+
+
+  filtrarRepuestos() {
+    const filtro = this.form.get('nombreRepuesto')?.value?.toLowerCase() || '';
+    this.repuestosFiltrados = this.repuestos.filter(r =>
+      r.nombre.toLowerCase().includes(filtro)
+    );
+  }
+
+  seleccionarRepuesto(nombreRepuesto: string) {
+    const repuestoSeleccionado = this.repuestos.find(r => r.nombre === nombreRepuesto);
+    if (repuestoSeleccionado) {
+      this.form.patchValue({
+        idRepuesto: repuestoSeleccionado.idRepuesto,
+        nombreRepuesto: repuestoSeleccionado.nombre
+      });
+    }
+  }
+
+  protected readonly FormGroup = FormGroup;
 }
 
 

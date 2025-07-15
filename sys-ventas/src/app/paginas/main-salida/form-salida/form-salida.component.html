@@ -7,25 +7,26 @@
   <form [formGroup]="form" (ngSubmit)="guardar()" class="formulario-cuerpo">
       <input type="hidden" formControlName="id" />
       <input type="hidden" formControlName="nombreRepuesto" />
-      <!-- Repuesto -->
-      <mat-form-field appearance="fill">
-        <mat-label>Repuesto</mat-label>
-        <mat-select
-          formControlName="idRepuesto"
-          required
-          (selectionChange)="actualizarNombreRepuesto($event.value)">
-          <mat-option *ngFor="let r of repuestos" [value]="r.idRepuesto">
-            {{ r.nombre }}
-          </mat-option>
-          <mat-option *ngFor="let r of repuestos" [value]="r.idRepuesto">
-            {{ r.nombre }} (Stock: {{ r.stockActual }})
-          </mat-option>
+    <mat-form-field appearance="fill">
+      <mat-label>Repuesto</mat-label>
+      <input
+        type="text"
+        matInput
+        formControlName="nombreRepuesto"
+        [matAutocomplete]="auto"
+        required
+      />
 
-        </mat-select>
-        <mat-error *ngIf="form.get('idRepuesto')?.hasError('required')">
-          Selecciona un repuesto
-        </mat-error>
-      </mat-form-field>
+      <mat-autocomplete #auto="matAutocomplete" (optionSelected)="seleccionarRepuesto($event.option.value)">
+        <mat-option *ngFor="let r of repuestosFiltrados" [value]="r.nombre">
+          {{ r.nombre }} (Stock: {{ r.stockActual }})
+        </mat-option>
+      </mat-autocomplete>
+
+      <mat-error *ngIf="form.get('nombreRepuesto')?.hasError('required')">
+        Selecciona un repuesto
+      </mat-error>
+    </mat-form-field>
 
       <!-- Cantidad -->
       <mat-form-field appearance="fill">
@@ -70,7 +71,10 @@
         <!-- Estado -->
         <mat-form-field appearance="fill">
           <mat-label>Estado</mat-label>
-          <input matInput formControlName="estado" />
+          <mat-select formControlName="estado" required>
+            <mat-option value="Pendiente">Pendiente</mat-option>
+            <mat-option value="Entregado">Entregado</mat-option>
+          </mat-select>
         </mat-form-field>
 
     <!-- Botones -->

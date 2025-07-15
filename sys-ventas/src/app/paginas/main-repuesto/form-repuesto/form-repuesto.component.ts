@@ -124,7 +124,7 @@ export class FormRepuestoComponent implements OnInit{
 
     operacion
       .pipe(switchMap(()=>{
-        return this.serviceRepuesto.listPageable(0, 2);
+        return this.serviceRepuesto.listPageable(0, 200);
       }))
       .subscribe((data) => {
         this.serviceRepuesto.setRepuestoSubject(data);

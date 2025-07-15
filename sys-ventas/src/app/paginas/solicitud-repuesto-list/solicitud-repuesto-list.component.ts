@@ -118,7 +118,7 @@ export class SolicitudRepuestoListComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.solicitudService.listPageable(0, 5).subscribe(data => {
+        this.solicitudService.listPageable(0, 200).subscribe(data => {
           this.createTable(data);
         });
       }

@@ -67,7 +67,7 @@ export class MainRepuestoComponent implements OnInit {
   constructor(private repuestoService: RepuestoService, private _snackBar: MatSnackBar) {}
 
   ngOnInit(): void {
-    this.repuestoService.listPageable(0, 2).subscribe(data=>{
+    this.repuestoService.listPageable(0, 200).subscribe(data=>{
       this.repuestoService.setRepuestoSubject(data);
     });
     this.repuestoService.getRepuestoSubject().subscribe(data => {
@@ -86,7 +86,7 @@ export class MainRepuestoComponent implements OnInit {
   eliminar(id:number){
     if(confirm("Desea eliminar?")){
       this.repuestoService.delete(id).pipe(switchMap( ()=>
-        this.repuestoService.listPageable(0, 2)))
+        this.repuestoService.listPageable(0, 200)))
         .subscribe(data=>{
           this.repuestoService.setRepuestoSubject(data);
           this.toastMsg("Se ha elimidado correctamente!");
